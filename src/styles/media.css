@@ -1,0 +1,47 @@
+/* DESKTOP*/
+@media (min-width: 1200px) {
+
+}
+
+/*TABLET*/
+@media (max-width: 1199px) {
+
+  .header-container{
+    padding:0 24px;
+  }
+
+  .hero,
+  .services,
+  .calculator{
+    grid-template-columns:1fr;
+  }
+
+  .popular-products{
+    padding:60px 24px;
+  }
+
+}
+
+/* MOBILE */
+@media (max-width: 767px){
+
+  .header-right{
+    display:none;
+  }
+
+  .hero,
+  .services,
+  .calculator{
+    grid-template-columns:1fr;
+  }
+
+  .services-right{
+    grid-template-columns:1fr;
+  }
+
+  .calculator-left,
+  .calculator-right{
+    padding:24px;
+  }
+
+}

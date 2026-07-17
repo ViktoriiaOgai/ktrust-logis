@@ -1,0 +1,51 @@
+.instagram {
+    padding: 120px 40px;
+}
+
+.instagram h2 {
+    font-size: 32px;
+    line-height: 1.1;
+    margin-bottom: 80px;
+}
+
+.instagram__posts {
+    display: flex;
+    justify-content: center;
+}
+.instagram__posts {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.instagram-card {
+  aspect-ratio: 1;
+  background: #fff;
+
+  padding: 24px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  text-decoration: none;
+
+  transition: 0.25s;
+}
+
+.instagram-card p {
+  color: #fff;
+  text-align: center;
+  line-height: 1.6;
+  font-size: 15px;
+
+  display: -webkit-box;
+
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.instagram-card:hover {
+  background: #3d3d3d;
+  transform: translateY(-6px);
+}

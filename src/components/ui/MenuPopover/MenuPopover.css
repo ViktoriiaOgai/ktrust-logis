@@ -1,0 +1,140 @@
+.menu-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+}
+.menu-popover__content {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+.menu-popover.header,
+.menu-popover.header .menu-popover__content,
+.menu-popover.header .own {
+  background: #f8f8f8;
+}
+.menu-popover.header {
+  position: fixed;
+
+  top: 80px;
+  left: 50%;
+
+  width: 50vw;
+  height: auto;
+  padding:  15px 0;
+  z-index: 1000;
+}
+.menu-popover.footer,
+.menu-popover.footer .menu-popover__content {
+  background: transparent;
+}
+.menu-popover.footer {
+  position: static;
+
+  padding: 0;
+
+  border: none;
+}
+
+.menu-columns {
+  display: grid;
+  grid-template-columns: 180px 180px 180px;     
+  gap: 40px;
+}
+.menu-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.menu-column h4 {
+  margin-bottom: 10px;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  text-transform: uppercase;
+  letter-spacing: .08em;
+
+  color: #999;
+}
+
+.menu-column a,
+.own-p {
+  display: block;
+
+  margin-bottom: 10px;
+
+  font-size: 12px;
+
+  color: #666565;
+  text-decoration: none;
+
+  transition: color .2s;
+}
+
+.menu-column a:hover {
+   transform: translateY(2px);
+
+  }
+.menu-column a:active {
+  transform: translateY(3px);
+}
+
+
+.contact-item {
+  margin-bottom: 15px;
+}
+
+.contact-item strong {
+  display: block;
+  margin-bottom: 5px;
+
+  font-size: 12px;
+  font-weight: 600;
+
+ color: #666565;
+}
+
+.contact-item p {
+  margin: 0;
+  font-size: 12px;
+  color: #555;
+  line-height: 1.1;
+  white-space: pre-line;
+}
+
+.menu-popover.header .own{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  position: fixed;
+  top: 230px;
+  left: 50%;
+
+  width: calc(50vw - 30px);
+  box-sizing: border-box;
+  padding: 20px;
+
+  background: #f8f8f8;
+  z-index: 1000;
+}
+ .net-icons {
+  display: flex;
+  align-items: center;
+  gap: 16px;    
+  width: auto;
+  height: auto;
+}
+.net-icons svg {
+  width: 24px;
+  height: 24px;
+
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.net-icons svg:hover {
+  transform: translateY(-2px);
+}

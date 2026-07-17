@@ -1,0 +1,64 @@
+
+.delivery-card__actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+
+  margin-top: 24px;
+}
+
+.delivery-card__top-row {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.delivery-card__icon svg {
+  width: 48px;
+  height: 48px;
+
+}
+.delivery-card__button {
+    color: #ff8515;
+ transition: all 0.2s ease;
+ display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px;
+}
+.delivery-card__button2 {
+    color: #000;
+ transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  padding: 8px;
+}
+.delivery-card__button:hover {
+  transform: translateY(2px);
+}
+
+.delivery-card__button:active {
+  transform: translateY(3px);
+}
+.delivery-card__button2:hover {
+  transform: translateY(2px);
+}
+
+.delivery-card__button2:active {
+  transform: translateY(3px);
+}
+.delivery-card__button svg {
+  width: 12px;
+  height: 12px;
+  margin-left: 8px;
+}
+.delivery-card__info {
+  font-size: 10px;
+  color: #9a9a9a;
+  margin-top: 4px;
+}
+.delivery-card__content p {
+  font-size: 14px;
+  color: #7f7f7f;
+}

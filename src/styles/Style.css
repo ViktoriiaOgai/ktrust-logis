@@ -1,0 +1,32 @@
+.menu-btn {
+  background: #eceaea;
+  color: rgb(99, 98, 98);
+
+  padding: 0;
+  border-radius: 0;
+  padding: 10px;
+
+  font-size: 14px;
+  font-weight: 500;
+   cursor: pointer;
+   transition: all 0.2s ease;
+}
+.menu-btn:hover {
+  transform: translateY(2px);
+}
+.menu-btn:active {
+  transform: translateY(2px);
+}
+
+.order-btn {
+  background: #ff8515;
+  color: #ffff;
+   transition: all 0.2s ease;
+}
+.order-btn:hover {
+  transform: translateY(2px);
+}
+
+.order-btn:active {
+  transform: translateY(3px);
+}

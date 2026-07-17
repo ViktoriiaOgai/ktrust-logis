@@ -1,0 +1,102 @@
+.service-card {
+  display: flex;
+  flex-direction: column;
+  height: 520px;
+
+  background: #fff;
+
+  transition: all 0.25s ease;
+}
+
+.service-card__image:hover {
+  transform: translateY(2px);
+
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.08);
+}
+.service-card__image:active {
+  transform: translateY(3px);
+}
+
+.service-card__image {
+  width: 100%;
+  height: 240px;
+
+  object-fit: cover;
+
+  display: block;
+}
+
+
+.service-card__content {
+  padding: 24px;
+ flex: 1;
+  display: flex;
+  flex-direction: column;
+
+}
+
+.service-card__content h3 {
+  margin: 0 0 16px;
+
+  font-size: 24px;
+  font-weight: 500;
+
+  color: #1f1f1f;
+
+  line-height: 1.2;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  line-clamp: 2;
+  -webkit-line-clamp: 2;
+
+
+  overflow: hidden;
+
+  min-height: 76px;
+}
+
+.service-card__content p {
+  margin: 0;
+
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  line-clamp: 2;
+  -webkit-line-clamp: 2;
+
+
+  overflow: hidden;
+
+  font-size: 12px;
+  line-height: 1.6;
+
+  min-height: calc(12px * 1.6 * 2);
+
+  color: #8f8f8f;
+}
+
+.service-card__button {
+  margin-top: auto;
+
+  width: fit-content;
+  padding: 12px 20px;
+
+  background: #f6f6f6;
+
+  color: #1f1f1f;
+  text-decoration: none;
+
+  font-size: 14px;
+  font-weight: 500;
+
+  transition: all 0.2s ease;
+}
+
+
+.service-card__button:hover {
+  transform: translateY(2px);
+}
+
+.service-card__button:active {
+  transform: translateY(3px);
+}
