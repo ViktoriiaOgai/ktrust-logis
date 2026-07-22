@@ -13,13 +13,11 @@ import Track from "@/assets/img/Track.jpg";
 import car from "@/assets/img/car.png";
 import official from "@/assets/img/54-min.png";
 import basic from "@/assets/img/53-min.png";
-import calc from "@/assets/img/calculator_img.png";
-import OrderButton from "@/components/ui/OrderButton";
-import Go from "@/assets/icons/go.svg?react";
 import PopularProducts from "@/components/sections/PopularProducts";
 import FAQ from "@/components/sections/FAQ";
 import InstagramSection from "@/components/sections/InstagramSection";
 import Footer from "@/components/layouts/Footer/Footer";
+import Calculator from "@/components/sections/Calculator";
 
 
 
@@ -86,51 +84,39 @@ export default function HomePage() {
   image={Track}
   title="B2B-доставка для бизнеса"
   description="Гибкие условия, консолидация и сопровождение для юрлиц"
-  to="/services/container"
+  to="/services/b2b"
   buttonText="Подробнее"
 />
 <ServicesCard
   image={car}
   title="Контейнер для отправки авто"
   description="Целый контейнер для вас - надежно, выгодно и без сюрпризов"
-  to="/services/container"
+  to="/services/carexport"
   buttonText="Подробнее"
 />
 <ServicesCard
   image={official}
   title="Официальный импорт"
   description="Услуги оформления всех документов и таможни"
-  to="/services/container"
+  to="/services/official"
   buttonText="Подробнее"
 />
 <ServicesCard
   image={basic}
   title="Отправка обычных товаров"
   description="Удобная отправка повседневных посылок из Кореи"
-  to="/services/container"
+  to="/services/personal"
   buttonText="Подробнее"
 />
 
       </div>
       </section>
-      <section className="calculator">
-        <div className="calculator-left">
-         <img
-    src={calc}
-    alt="Калькулятор"
-    className="calculator-image"
-  />
-        
-    </div>
-
-    <div className="calculator-right">
-       <h1>Получите точный расчет доставки за 30 минут</h1>
-      <p>Оставьте заявку, наш менеджер свяжется с вами и уточнит детали</p>
-      <OrderButton className="order-btn" to="/create-order">
-  Оставить заявку <Go />
-</OrderButton>
-    </div>
-      </section>
+      <Calculator
+        title="Получите точный расчет доставки за 30 минут"
+        description="Оставьте заявку, наш менеджер свяжется с вами и уточнит детали"
+        buttonText="Оставить заявку"
+        className="order-btn"
+       onButtonClick={() => "/create-order"}/>
     
   <PopularProducts/>
     </div>

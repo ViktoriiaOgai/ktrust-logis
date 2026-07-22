@@ -1,0 +1,26 @@
+.back-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 0;
+  margin-bottom: 32px;
+
+  background: transparent;
+  border: none;
+  cursor: pointer;
+
+  color: #404040;
+  font-size: 14px;
+  font-weight: 500;
+  transition: opacity 0.2s ease;
+}
+
+.back-button svg {
+  width: 16px;
+  height: 16px;
+}
+
+.back-button:hover {
+  opacity: 0.7;
+}

@@ -60,41 +60,6 @@
   padding: 24px;
 }
 
-.calculator {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-      align-items: stretch;
-
-}
-.calculator-image {
-  width: 100%;
-  max-width: 500px;
-  height: auto;
-
-  transform: scale(1);
-}
-.calculator-left,
-.calculator-right {
-  min-height: 350px;
-  padding: 60px;
-  box-sizing: border-box;
-}
-.calculator-left {
-   display: flex;
-  justify-content: center;
-  align-items: center;
-  background: #f56f02;
-    
-}
-
-.calculator-right {
-    background: #eceaea;
-    border: 1px solid #e5e5e5;
-    
-  }
-.calculator-right p  {
-  color: darkgray;
-}
 .products-info p {
   color: darkgray;
 }

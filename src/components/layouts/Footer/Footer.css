@@ -1,87 +1,154 @@
 .footer {
-      background: #eceaea;
-    display:flex;
-    flex-direction: row;
-    padding: 20px;
-    }
-    .footer-container {
-  max-width: 1440px;
+  background: #eceaea;
+  padding: 20px;
+}
 
-  margin: 0 auto;
+.footer-container {
+    width: 100%;
 
+    margin: 0 auto;
+
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    column-gap: 120px;
+}
+
+/* Левая колонка */
+
+.footer-r {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
+  flex-direction: column;
+  gap: 28px;
+  flex-shrink: 0;
+}
+
+.footer-logo svg {
+  width: auto;
+  height: 40px;
+}
+
+.footer-logo-p {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #5c5b5b;
+}
+
+/* Правая часть */
+
+.footer-right {
+  display: flex;
+  justify-content: flex-end;
+  flex: 1;
   gap: 80px;
 }
 
 .footer-left {
-  flex: 0 0 320px; /* ширина логотипа */
+    width: 320px;
 }
-
-.footer-right {
-  flex: 1;
-  
-  display: flex;
-  justify-content: flex-end;
-}
-
-.footer__top {
+.footer-navigation {
     display: grid;
-    grid-template-columns:
-        1.3fr
-        1fr
-        1fr
-        1.5fr;
-
-    gap: 80px;
+    grid-template-columns: repeat(3, max-content);
+    justify-content: end;
+    column-gap: 80px;
 }
+
+.footer-column {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Заголовки */
 
 .footer h4 {
-    margin-bottom: 32px;
+  margin-bottom: 20px;
 
-    font-size: 14px;
-    text-transform: uppercase;
-    color: #999;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+
+  color: #999;
 }
 
-.footer ul {
-    display: flex;
+/* Ссылки */
+
+.footer-column a {
+  display: inline-block;
+
+  margin-bottom: 12px;
+
+  font-size: 14px;
+  line-height: 1.5;
+  color: #5c5b5b;
+  text-decoration: none;
+
+  transition: transform .2s ease, color .2s ease;
+}
+
+.footer-column a:hover {
+  transform: translateY(2px);
+}
+
+.footer-column a:active {
+  transform: translateY(4px);
+}
+
+/* Контакты */
+
+.contact-item {
+  margin-bottom: 16px;
+}
+
+.contact-item strong {
+  display: block;
+  margin-bottom: 4px;
+
+  font-size: 14px;
+  font-weight: 500;
+  color: #5c5b5b;
+}
+
+.contact-item p {
+  margin: 0;
+
+  font-size: 14px;
+  line-height: 1.5;
+  color: #5c5b5b;
+}
+
+/* Планшет */
+
+@media (max-width: 1200px) {
+  .footer-container {
     flex-direction: column;
-    gap: 16px;
+    gap: 48px;
+  }
 
-    list-style: none;
-    padding: 0;
-}
-
-.footer a {
-    text-decoration: none;
-    color: #1f1f1f;
-}
-
-.footer__bottom {
-    margin-top: 80px;
-
-    padding-top: 24px;
-
-    border-top: 1px solid #ddd;
-
-    display: flex;
+  .footer-right {
+    width: 100%;
     justify-content: space-between;
+    gap: 48px;
+  }
 
-    color: #999;
+  .footer-navigation {
+    gap: 48px;
+  }
 }
-.footer-r {
-    display: flex;
+
+/* Телефон */
+
+@media (max-width: 768px) {
+  .footer {
+    padding: 32px 20px;
+  }
+
+  .footer-right {
     flex-direction: column;
-  align-items:flex-start;
-  gap: 28px;
-   font-size: 14px;
-}
-.footer-logo-p {
-    color: #5c5b5b;
-}
-.footer-logo svg {
-    height: 40px;
-  width: auto;
+    gap: 32px;
+  }
+
+  .footer-navigation {
+    flex-direction: column;
+    gap: 32px;
+  }
 }

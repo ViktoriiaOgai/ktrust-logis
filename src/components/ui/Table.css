@@ -1,0 +1,38 @@
+.delivery-table {
+  margin-top: 60px;
+  scroll-margin-top: 100px; /* чтобы якорь не прятался под Header */
+}
+
+.delivery-table h2 {
+  margin-bottom: 20px;
+  font-size: 28px;
+}
+
+.delivery-table table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid #e5e5e5;
+}
+
+.delivery-table th,
+.delivery-table td {
+  padding: 20px;
+  border: 1px solid #e5e5e5;
+  text-align: left;
+  vertical-align: top;
+}
+
+.delivery-table th {
+  background: #f7f7f7;
+  font-weight: 600;
+}
+
+.delivery-table tr:nth-child(even) {
+  background: #fafafa;
+}
+.table-close-icon {
+  width: 24px;
+  height: 24px;
+
+  flex-shrink: 0;
+}

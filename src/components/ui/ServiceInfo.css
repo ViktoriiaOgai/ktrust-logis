@@ -1,0 +1,25 @@
+.service-info {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.service-info__icon {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  margin-top: 2px;
+}
+
+.service-info__text h3 {
+  margin: 0 0 4px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.service-info__text p {
+  margin: 0;
+  color: #666;
+  font-size: 15px;
+  line-height: 1.5;
+}

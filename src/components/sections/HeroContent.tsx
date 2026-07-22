@@ -3,7 +3,10 @@ import OrderButton from "@/components/ui/OrderButton";
 import Go from "@/assets/icons/go.svg?react";
 import "@/styles/Style.css";
 import managerVideo from "@/assets/video/manager.mp4";
+
+
 export default function HeroContent() {
+
     return (
         <>
     <div className="tab">
