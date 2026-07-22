@@ -8,6 +8,7 @@ import DashboardPage from "@/pages/admin/DashboardPage";
 import OrdersPage from "@/pages/admin/OrdersPage";
 import OrderDetailsPage from "@/pages/admin/OrderDetailsPage";
 import CreateOrderPage from "@/pages/client/CreateOrderPage";
+import AirDeliveryPage from "@/pages/client/Services/AirDeliveryPage";
 
 export const router = createBrowserRouter([
   {
@@ -37,5 +38,9 @@ export const router = createBrowserRouter([
   {
     path: "/create-order",
     element: <CreateOrderPage />,
+  },
+  {
+    path: "/services/air",
+    element: <AirDeliveryPage/>,
   },
 ]);

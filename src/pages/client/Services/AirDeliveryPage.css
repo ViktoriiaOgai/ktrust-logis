@@ -1,0 +1,67 @@
+
+.service-page-hero {
+    display: grid;
+  grid-template-columns: 1fr 1fr;
+
+}
+.service-hero__right img {
+    width: 100%;
+    display: block;
+    padding-top: 80px;
+}
+.tariffs-btn {
+  color: #f56f02;
+  background: transparent;
+  margin-top: 20px;
+}
+
+.service-hero {
+    padding-top: 80px;
+}
+
+
+
+.price-section {
+  padding: 20px;
+}
+
+.price-section h1 {
+  margin-bottom: 40px;
+  text-align:left;
+}
+
+.price-section .tab {
+  display: flex;
+  justify-content:flex-start;
+  gap: 16px;
+  margin-bottom: 48px;
+  flex-wrap: wrap;
+  
+}
+
+.price-section .InfBtn {
+  padding: 12px 24px;
+  background: rgb(240, 240, 240);
+  cursor: pointer;
+  transition: 0.3s;
+  
+
+  border: none;
+    border-radius: 8px;
+    opacity: 1;
+    color: rgb(99, 98, 98);
+  
+}
+
+.price-section .InfBtn:hover {
+  background:rgb(99, 98, 98);
+  color: #fff;
+  border-color: rgb(99, 98, 98);
+}
+
+.price-table {
+  background: #fff;
+  border-radius: 20px;
+  padding: 32px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+}

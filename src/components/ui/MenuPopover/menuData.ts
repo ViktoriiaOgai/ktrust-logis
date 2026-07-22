@@ -2,11 +2,11 @@ export const headerSections = [
   {
     title: "УСЛУГИ",
     items: [
-      { title: "Отправка обычных товаров", href: "/services/basic" },
+      { title: "Отправка обычных товаров", href: "/services/personal" },
       { title: "Авиа доставка", href: "/services/air" },
       { title: "Контейнерная доставка", href: "/services/container" },
-      { title: "Официальный импорт", href: "/services/import" },
-      { title: "Отправка авто", href: "/services/car" },
+      { title: "Официальный импорт", href: "/services/official" },
+      { title: "Отправка авто", href: "/services/carexport" },
       { title: "Контейнеры для бизнеса (B2B)", href: "/services/b2b" },
     ],
   },
@@ -37,7 +37,7 @@ export const footerSections = [
   {
     title: "УСЛУГИ",
     items: [
-      { title: "Отправка обычных товаров", href: "/services/basic" },
+      { title: "Отправка обычных товаров", href: "/services/personal" },
       { title: "Авиа доставка", href: "/services/air" },
       { title: "Контейнерная доставка", href: "/services/container" },
       { title: "Официальный импорт", href: "/services/import" },

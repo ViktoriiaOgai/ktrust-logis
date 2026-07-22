@@ -1,19 +1,17 @@
+import { contacts } from "@/components/ui/MenuPopover/menuData";
 import "@/components/layouts/Footer/Footer.css";
-
-import MenuPopover from "@/components/ui/MenuPopover/MenuPopover";
-import {
-  footerSections,
-  contacts,
-} from "@/components/ui/MenuPopover/menuData";
 
 export default function FooterContacts() {
   return (
-    <>
-      <MenuPopover
-        variant="footer"
-        sections={footerSections}
-        contacts={contacts}
-      />
-    </>
+    <div className="footer-column">
+      <h4>Контакты</h4>
+
+      {contacts.map((contact) => (
+        <div key={contact.label} className="contact-item">
+          <strong>{contact.label}</strong>
+          <p>{contact.value}</p>
+        </div>
+      ))}
+    </div>
   );
 }

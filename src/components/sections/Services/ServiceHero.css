@@ -1,0 +1,35 @@
+
+
+.service-hero__content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 60px;
+}
+
+.service-hero__left {
+    display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  
+  padding: 20px;
+}
+
+.service-hero__left h1 {
+    margin-bottom: 24px;
+}
+
+.service-hero__left p {
+    margin-bottom: 40px;
+    max-width: 550px;
+}
+
+.service-hero__right {
+    flex: 1;
+}
+
+.service-hero__right img {
+    width: 100%;
+    display: block;
+    height: 450px;
+}
