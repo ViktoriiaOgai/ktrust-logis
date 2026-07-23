@@ -9,6 +9,7 @@ import OrdersPage from "@/pages/admin/OrdersPage";
 import OrderDetailsPage from "@/pages/admin/OrderDetailsPage";
 import CreateOrderPage from "@/pages/client/CreateOrderPage";
 import AirDeliveryPage from "@/pages/client/Services/AirDeliveryPage";
+import ContainerDeliveryPage from "@/pages/client/Services/ContainerDeliveryPage";
 
 export const router = createBrowserRouter([
   {
@@ -42,5 +43,9 @@ export const router = createBrowserRouter([
   {
     path: "/services/air",
     element: <AirDeliveryPage/>,
+  },
+  {
+    path: "/services/container",
+    element: <ContainerDeliveryPage/>,
   },
 ]);

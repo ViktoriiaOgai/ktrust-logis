@@ -2,15 +2,16 @@ import Header from "@/components/layouts/Header/Header";
 import "@/pages/client/HomePage.css";
 import "@/pages/client/Services/AirDeliveryPage.css";
 import "@/components/sections/HeroContent";
-import shutterstock_2362125 from "@/assets/img/shutterstock_2362125.jpg"
+import a_container_from_ins from "@/assets/img/a_container_from_ins.jpg"
 import Calculator from "@/components/sections/Calculator";
 import Footer from "@/components/layouts/Footer/Footer";
 import ServiceHero from "@/components/sections/Services/ServiceHero";
-import { airDelivery } from "@/data/delivery/airDelivery";
+import {containerDelivery } from "@/data/delivery/containerDelivery";
 import Table from "@/components/ui/Table";
+import ContainerInstructions from "@/components/sections/ContainerInstructions/ContainerInstructions";
 
 
-export default function AirDeliveryPage() {
+export default function ContainerDeliveryPage() {
 
    return (
     <>
@@ -19,21 +20,21 @@ export default function AirDeliveryPage() {
         <section className="service-page-hero">
           <div className="hero-left">
       <ServiceHero
-    title="Авиа перевозки из Южной Кореи"
+    title="Контейнерная доставка из Южной Кореи"
     description=""
     buttonText="Тарифы"
     info={[
     {
       title: "Скорость доставки",
-      description: "От 1 до 21 дня в зависимости от страны",
+      description: "От 14 до 40 дней в зависимости от страны",
     },
     {
       title: "Стоимость",
-      description: "Дороже, чем контейнером",
+      description: "Дешевле, чем авиа",
     },
     {
       title: "Товар",
-      description: "Идеально для небольших партий",
+      description: "Подходитбольших партий",
     },
   ]}
 />
@@ -41,15 +42,15 @@ export default function AirDeliveryPage() {
       </div>
       <div className="service-hero__right">
     
-          <img src={shutterstock_2362125}/>
+          <img src={a_container_from_ins}/>
 
       </div>
       </section>
 
     <section id="price" className="price-section">
-        <h1>Тарифы авиа</h1> 
+        <h1>Тарифы контейнер</h1> 
   <div className="tab">
-  {airDelivery.air.tariffs.map((country) => (
+  {containerDelivery.container.tariffs.map((country) => (
     <a
       key={country.id}
       href={`#${country.id}`}
@@ -59,7 +60,7 @@ export default function AirDeliveryPage() {
     </a>
   ))}
 </div>
-  {airDelivery.air.tariffs.map((country) => (
+  {containerDelivery.container.tariffs.map((country) => (
   <Table
     key={country.id}
     id={country.id}
@@ -71,6 +72,8 @@ export default function AirDeliveryPage() {
     
     
 </section>
+<ContainerInstructions/>
+
       <Calculator
   title="Получите консультацию"
   description="Оставьте заявку, наш менеджер свяжется с вами и уточнит детали"
