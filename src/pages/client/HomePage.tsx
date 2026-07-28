@@ -15,6 +15,8 @@ import official from "@/assets/img/54-min.png";
 import basic from "@/assets/img/53-min.png";
 import PopularProducts from "@/components/sections/PopularProducts";
 import FAQ from "@/components/sections/FAQ";
+import {homePageFaq} from "@/data/delivery/faq/Faq";
+
 import InstagramSection from "@/components/sections/InstagramSection";
 import Footer from "@/components/layouts/Footer/Footer";
 import Calculator from "@/components/sections/Calculator";
@@ -23,6 +25,7 @@ import Calculator from "@/components/sections/Calculator";
 
 
 export default function HomePage() {
+  
   return (
     <>
       <Header />
@@ -55,7 +58,7 @@ export default function HomePage() {
       </div>
       </section>
 
-      <section className="services">
+      <section className="services"  id="services-cards">
           <div className="services-left">
             <div className="services-left__sticky">
       <h1>Логистические решения</h1>
@@ -120,7 +123,11 @@ export default function HomePage() {
     
   <PopularProducts/>
     </div>
-    <FAQ />
+    <FAQ
+  title={homePageFaq.title}
+  description={homePageFaq.description}
+  items={homePageFaq.items}
+/>
     <InstagramSection />
 
 <Footer />

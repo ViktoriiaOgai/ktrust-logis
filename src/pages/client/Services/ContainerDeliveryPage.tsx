@@ -7,6 +7,7 @@ import Calculator from "@/components/sections/Calculator";
 import Footer from "@/components/layouts/Footer/Footer";
 import ServiceHero from "@/components/sections/Services/ServiceHero";
 import {containerDelivery } from "@/data/delivery/containerDelivery";
+import { containerInstructions } from "@/data/delivery/instructions";
 import Table from "@/components/ui/Table";
 import ContainerInstructions from "@/components/sections/ContainerInstructions/ContainerInstructions";
 
@@ -72,7 +73,10 @@ export default function ContainerDeliveryPage() {
     
     
 </section>
-<ContainerInstructions/>
+<ContainerInstructions
+  data={containerInstructions}
+  notesTitle="Условия упаковки и ответственности"
+/>
 
       <Calculator
   title="Получите консультацию"

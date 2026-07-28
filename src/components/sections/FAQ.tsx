@@ -1,54 +1,32 @@
 import "@/components/sections/FAQ.css";
 import { FiPlus, FiX } from "react-icons/fi";
 
-const faq = [
-  {
-    question: "Как рассчитать стоимость доставки?",
-    answer:
-      "Стоимость зависит от веса, объема, страны назначения и способа доставки. Оставьте заявку — менеджер рассчитает стоимость бесплатно.",
-  },
-  {
-    question: "В какие страны вы отправляете?",
-    answer:
-      "Казахстан, Кыргызстан, Россия, Узбекистан — список постепенно расширяется.",
-  },
-  {
-    question: "Сколько длится доставка?",
-    answer:
-      "Авиа — от 1 дня. Контейнер — от 14 дней. Срок зависит от направления.",
-  },
-  {
-    question: "Какие есть способы оплаты?",
-    answer:
-      "Банковский перевод, наличные в офисе, возможна оплата по реквизитам.",
-  },
-  {
-    question: "Нужно ли оформлять документы на товар?",
-    answer:
-      "Если отправка официальная — да. Для личных вещей и посылок — нет.",
-  },
-  {
-    question: "Что делать, если груз задерживается?",
-    answer:
-      "Свяжитесь с менеджером. Мы оперативно уточним статус и сообщим информацию.",
-  },
-];
+export interface FAQItem {
+  question: string;
+   answer: string | string[];
+}
 
-export default function FAQ() {
+interface FAQProps {
+  title: string;
+  description: string;
+  items: FAQItem[];
+}
+
+export default function FAQ({
+  title,
+  description,
+  items,
+}: FAQProps) {
   return (
     <section className="faq">
       <div className="faq-left">
-        <h2>Часто задаваемые вопросы и ответы</h2>
+        <h2>{title}</h2>
 
-        <p>
-          Мы собрали самые частые вопросы, которые помогают быстрее
-          разобраться в процессе доставки. Если не нашли нужного ответа —
-          свяжитесь с менеджером.
-        </p>
+        <p>{description}</p>
       </div>
 
       <div className="faq-right">
-        {faq.map((item) => (
+        {items.map((item) => (
           <details key={item.question} className="faq-item">
             <summary>
               <span className="question">{item.question}</span>
@@ -59,7 +37,15 @@ export default function FAQ() {
               </span>
             </summary>
 
-            <p>{item.answer}</p>
+            {Array.isArray(item.answer) ? (
+  <ul className="faq-list">
+    {item.answer.map((answer) => (
+      <li key={answer}>{answer}</li>
+    ))}
+  </ul>
+) : (
+  <p>{item.answer}</p>
+)}
           </details>
         ))}
       </div>

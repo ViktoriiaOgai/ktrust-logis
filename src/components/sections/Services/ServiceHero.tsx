@@ -1,6 +1,6 @@
 import "./ServiceHero.css";
 import Go from "@/assets/icons/go.svg?react";
-
+import { useNavigate } from "react-router-dom";
 import BackButton from "@/components/ui/BackButton/BackButton";
 import OrderButton from "@/components/ui/OrderButton";
 import ServiceInfo from "@/components/ui/ServiceInfo"; 
@@ -20,19 +20,26 @@ export default function ServiceHero({
   title,
   description,
   buttonText,
+  buttonLink,
   info,
 }: ServiceHeroProps) {
+  const navigate = useNavigate();
 
-  const scrollToPrice = () => {
-    const section = document.getElementById("price");
+  const handleButtonClick = () => {
+  if (buttonLink) {
+    navigate(buttonLink);
+    return;
+  }
 
-    if (section) {
-      window.scrollTo({
-        top: section.offsetTop - 80, // высота Header
-        behavior: "smooth",
-      });
-    }
-  };
+  const section = document.getElementById("price");
+
+  if (section) {
+    window.scrollTo({
+      top: section.offsetTop - 80,
+      behavior: "smooth",
+    });
+  }
+};
 
   return (
     <section className="service-hero">
@@ -56,11 +63,11 @@ export default function ServiceHero({
 
            {buttonText && (
             <OrderButton
-              className="tariffs-btn"
-              onClick={scrollToPrice}
-            >
-              {buttonText} <Go />
-            </OrderButton>
+  className="tariffs-btn"
+  onClick={handleButtonClick}
+>
+  {buttonText} <Go />
+</OrderButton>
           )}
         </div>
       </div>

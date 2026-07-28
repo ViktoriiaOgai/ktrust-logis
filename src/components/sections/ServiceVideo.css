@@ -1,0 +1,12 @@
+.service-video {
+  width: 100%;
+  margin: 80px 0;
+}
+
+.service-video iframe {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: none;
+  background: black;
+
+}

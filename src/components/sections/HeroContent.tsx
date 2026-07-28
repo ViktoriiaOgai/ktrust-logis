@@ -6,7 +6,16 @@ import managerVideo from "@/assets/video/manager.mp4";
 
 
 export default function HeroContent() {
+const scrollToServices = () => {
+  const section = document.getElementById("services-cards");
 
+  if (section) {
+    window.scrollTo({
+      top: section.offsetTop - 80, // если Header фиксированный
+      behavior: "smooth",
+    });
+  }
+};
     return (
         <>
     <div className="tab">
@@ -20,7 +29,7 @@ export default function HeroContent() {
     <OrderButton className="order-btn" to="/create-order">
   Оставить заявку <Go />
 </OrderButton>
-<OrderButton className="menu-btn" to="/create-order">
+<OrderButton className="menu-btn"  onClick={scrollToServices}>
 Услуги</OrderButton>
 </div>
 <div className="review-card">

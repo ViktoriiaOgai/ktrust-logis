@@ -5,9 +5,10 @@
 .container-instructions h2 {
   font-size: 36px;
   font-weight: 700;
-  text-align: center;
+  text-align:left;
   margin-bottom: 60px;
   color: #222;
+  padding: 20px;
 }
 
 /* ---------- Шаги ---------- */
@@ -137,4 +138,65 @@ gap: 20px;
   flex-direction: column;
 
   color: #5a5a5a;
+}
+
+
+.container-instructions__steps--column {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.container-instructions__steps--column .instruction-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 28px;
+  text-align: left;
+  flex: none;
+}
+
+.container-instructions__steps--column .instruction-step__icon {
+  margin: 0;
+  flex-shrink: 0;
+}
+
+.container-instructions__steps--column .instruction-step__content {
+  flex: 1;
+}
+
+.container-instructions__steps--column .instruction-step h3 {
+  margin-bottom: 8px;
+  font-size: 22px;
+}
+
+.container-instructions__steps--column .instruction-step p {
+  margin: 0;
+  line-height: 1.7;
+}
+
+.container-instructions__steps--column .instruction-step {
+  position: relative;
+  padding-bottom: 28px;
+}
+
+.container-instructions__steps--column
+.instruction-step:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  left: 35px;
+  top: 70px;
+  width: 2px;
+  height: calc(100% - 30px);
+  background: #F56F02;
+}
+
+
+.instruction-step__icon--column {
+  background: #F7F2EC;
+}
+
+.instruction-icon--column {
+  color: #6A625A;
 }

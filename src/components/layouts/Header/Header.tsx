@@ -5,18 +5,21 @@ import "@/components/layouts/Header/Header.css";
 import { useState } from "react";
 import MenuPopover from "@/components/ui/MenuPopover/MenuPopover";
 import { headerSections} from "@/components/ui/MenuPopover/menuData";
+import { Link } from "react-router-dom";
 
 export default function Header() {
   const [menuType, setMenuType] = useState<
     "services" | "about" | "contacts" | null
   >(null);
-
+ 
   return (
     <>
       <header className="header">
         <div className="header-container">
           <div className="header-left">
-            <Logo />
+            <Link to="/" className="Btn-logo" >
+      <Logo />
+    </Link>
           </div>
 
           <div className="header-right">
