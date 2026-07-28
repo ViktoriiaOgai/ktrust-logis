@@ -13,7 +13,7 @@ import ContainerDeliveryPage from "@/pages/client/Services/ContainerDeliveryPage
 import PersonalDeliveryPage from "@/pages/client/Services/PersonalDeliveryPage";
 import OfficialDeliveryPage from "@/pages/client/Services/OfficialDeliveryPage";
 import CarDeliveryPage from "@/pages/client/Services/CarDeliveryPage";
-import B2BPage from "@/pages/client/Services/b2bPage";
+import B2BPage from "@/pages/client/Services/B2BPage";
 import RootLayout from "@/components/layouts/RootLayout";
 
 export const router = createBrowserRouter([
