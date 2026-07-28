@@ -33,3 +33,15 @@
   height: 40px;
   width: auto;
 }
+.Btn-logo {
+  border: none;
+ transition: transform .2s ease, color .2s ease;
+}
+
+.Btn-logo:hover {
+  transform: translateY(2px);
+}
+
+.Btn-logo:active {
+  transform: translateY(4px);
+}

@@ -11,6 +11,9 @@
 .products-info{
     max-width:550px;
 }
+.products-info h2{
+    font-size: 32px;
+}
 
 .popular-products__buttons{
     display:flex;
@@ -50,4 +53,7 @@
 
 .swiper-slide .product-card {
   width: 100%;
+}
+.h2 {
+  font-size: 32px;
 }

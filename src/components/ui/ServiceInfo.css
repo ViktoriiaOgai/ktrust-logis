@@ -13,8 +13,8 @@
 
 .service-info__text h3 {
   margin: 0 0 4px;
-  font-size: 18px;
-  font-weight: 600;
+  font-size: 16px;
+  color: #666;
 }
 
 .service-info__text p {

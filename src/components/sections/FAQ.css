@@ -92,3 +92,11 @@ details[open] .plus {
 details[open] .close {
   display: block;
 }
+.faq-list {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.faq-list li {
+  margin-bottom: 8px;
+}

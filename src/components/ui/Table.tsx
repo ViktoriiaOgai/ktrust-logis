@@ -1,7 +1,7 @@
 import "@/components/ui/Table.css";
 import TableNotes from "@/components/ui/TableNotes/TableNotes";
 import Close from "@/assets/icons/close.svg?react";
-import type { TableRow } from "@/data/delivery/airDelivery";
+import type { TableRow } from "@/data/delivery/delivery/airDelivery";
 
 type TableProps = {
   id: string;
