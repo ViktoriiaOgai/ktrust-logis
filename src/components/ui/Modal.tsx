@@ -5,7 +5,7 @@ import "@/components/ui/Modal.css";
 // Иконки
 import PhoneIcon from "@/assets/icons/phone.svg?react";
 import TelegramIcon from "@/assets/icons/Telegram.svg";
-import WhatsappIcon from "@/assets/icons/whatsapp.svg?react";
+import WhatsappIcon from "@/assets/icons/WhatsApp.svg?react";
 import Down from "@/assets/icons/chevron-down.svg?react";
 
 interface ModalProps {
