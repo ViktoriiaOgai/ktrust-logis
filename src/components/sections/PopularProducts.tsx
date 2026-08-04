@@ -5,6 +5,9 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 
+import Left from "@/assets/icons/chevron-left.svg?react";
+import Right from "@/assets/icons/chevron-right.svg?react";
+
 import ProductCard from "@/components/ui/ProductCard";
 
 import cosm from "@/assets/img/cosm.png";
@@ -35,12 +38,12 @@ export default function PopularProducts() {
 
         <div className="popular-products__buttons">
           <button className="products-prev">
-  ←
+ <Left/>
 </button>
 
 
           <button className="products-next">
-  →
+  <Right/>
 </button>
         </div>
 

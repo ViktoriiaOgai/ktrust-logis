@@ -1,0 +1,40 @@
+.team-card{
+
+    display:flex;
+    flex-direction:column;
+
+    text-decoration:none;
+
+    color:#111;
+
+    border-right:1px solid #ececec;
+     width:250px;
+    height:350px;
+}
+
+.team-card__image{
+
+    width:250px;
+    height:250px;
+
+    object-fit:contain;
+}
+.product-card__arrow {
+  width: 15px;
+  height: 15px;
+
+  color: #000;
+}
+.team__label {
+     margin-top: 20px;
+
+  max-width: 180px;
+
+  text-align: center;
+  white-space: pre-line;
+
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.5;
+  color: #050505;
+}

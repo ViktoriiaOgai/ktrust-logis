@@ -6,7 +6,7 @@ type Props = {
   children: React.ReactNode;
   to?: string; // если нужно перейти
   type?: "button" | "submit";
-  onClick?: () => void;
+  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
   className?: string;
   disabled?: boolean;
 
@@ -17,7 +17,8 @@ export default function OrderButton({
   to, 
   type = "button", 
   onClick, 
-  className = "" }: Props) {
+  className = "", 
+disabled = false}: Props) {
   const classes = `Button ${className}`;
   // Если передан 'to', рендерим Link
   if (to) {
@@ -30,7 +31,12 @@ export default function OrderButton({
 
   // Иначе обычная кнопка
   return (
-    <button type={type} onClick={onClick} className={classes}>
+    <button 
+      type={type} 
+      onClick={onClick} 
+      className={classes}
+      disabled={disabled}
+    >
       {children}
     </button>
   );

@@ -11,7 +11,7 @@ import Table from "@/components/ui/Table";
 
 
 export default function AirDeliveryPage() {
-
+ 
    return (
     <>
       <Header />
@@ -22,6 +22,7 @@ export default function AirDeliveryPage() {
     title="Авиа перевозки из Южной Кореи"
     description=""
     buttonText="Тарифы"
+    scrollToPrice={true}
     info={[
     {
       title: "Скорость доставки",
@@ -72,14 +73,14 @@ export default function AirDeliveryPage() {
     
 </section>
       <Calculator
-  title="Получите консультацию"
-  description="Оставьте заявку, наш менеджер свяжется с вами и уточнит детали"
-  buttonText="Оставить заявку"
-  className="order-btn"
- onButtonClick={() => "/create-order"}
-/>
+        title="Получите консультацию"
+        description="Оставьте заявку, наш менеджер свяжется с вами и уточнит детали"
+        buttonText="Оставить заявку"
+        className="order-btn"
+      />
      </div>
     <Footer />
+   
     </>
   );
 }

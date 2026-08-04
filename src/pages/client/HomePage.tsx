@@ -16,7 +16,6 @@ import basic from "@/assets/img/53-min.png";
 import PopularProducts from "@/components/sections/PopularProducts";
 import FAQ from "@/components/sections/FAQ";
 import {homePageFaq} from "@/data/delivery/faq/Faq";
-
 import InstagramSection from "@/components/sections/InstagramSection";
 import Footer from "@/components/layouts/Footer/Footer";
 import Calculator from "@/components/sections/Calculator";
@@ -25,7 +24,7 @@ import Calculator from "@/components/sections/Calculator";
 
 
 export default function HomePage() {
-  
+    
   return (
     <>
       <Header />
@@ -119,7 +118,7 @@ export default function HomePage() {
         description="Оставьте заявку, наш менеджер свяжется с вами и уточнит детали"
         buttonText="Оставить заявку"
         className="order-btn"
-       onButtonClick={() => "/create-order"}/>
+       />
     
   <PopularProducts/>
     </div>
@@ -131,6 +130,7 @@ export default function HomePage() {
     <InstagramSection />
 
 <Footer />
+
     </>
   );
 }

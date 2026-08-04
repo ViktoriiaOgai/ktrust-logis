@@ -24,6 +24,7 @@ export default function ContainerDeliveryPage() {
     title="Контейнерная доставка из Южной Кореи"
     description=""
     buttonText="Тарифы"
+    scrollToPrice={true}
     info={[
     {
       title: "Скорость доставки",
@@ -83,7 +84,7 @@ export default function ContainerDeliveryPage() {
   description="Оставьте заявку, наш менеджер свяжется с вами и уточнит детали"
   buttonText="Оставить заявку"
   className="order-btn"
- onButtonClick={() => "/create-order"}
+ 
 />
      </div>
     <Footer />

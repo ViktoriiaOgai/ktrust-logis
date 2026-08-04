@@ -28,7 +28,6 @@ export default function OfficialDeliveryPage() {
     title="Официальный импорт"
     description=""
     buttonText="Получить расчет"
-    buttonLink="/create-order"
     info={[
     {
       title: "Официальный импорт без головной боли",
@@ -70,7 +69,6 @@ export default function OfficialDeliveryPage() {
   description="Оставьте заявку, наш менеджер свяжется с вами и уточнит детали"
   buttonText="Оставить заявку"
   className="order-btn"
- onButtonClick={() => "/create-order"}
 />
      </div>
     <Footer />

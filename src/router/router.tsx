@@ -7,6 +7,8 @@ import LoginPage from "@/pages/auth/LoginPage";
 import DashboardPage from "@/pages/admin/DashboardPage";
 import OrdersPage from "@/pages/admin/OrdersPage";
 import OrderDetailsPage from "@/pages/admin/OrderDetailsPage";
+import UsersPage from "@/pages/admin/UsersPage";
+import CustomersPage from "@/pages/admin/CustomersPage";
 import CreateOrderPage from "@/pages/client/CreateOrderPage";
 import AirDeliveryPage from "@/pages/client/Services/AirDeliveryPage";
 import ContainerDeliveryPage from "@/pages/client/Services/ContainerDeliveryPage";
@@ -15,6 +17,7 @@ import OfficialDeliveryPage from "@/pages/client/Services/OfficialDeliveryPage";
 import CarDeliveryPage from "@/pages/client/Services/CarDeliveryPage";
 import B2BPage from "@/pages/client/Services/B2BPage";
 import RootLayout from "@/components/layouts/RootLayout";
+import AboutPage from "@/pages/client/Abouts/AboutPage";
 
 export const router = createBrowserRouter([
   {
@@ -45,6 +48,14 @@ export const router = createBrowserRouter([
         element: <OrderDetailsPage />,
       },
       {
+        path: "/users",
+        element: <UsersPage />,
+      },
+      {
+        path: "/customers",
+        element: <CustomersPage />,
+      },
+      {
         path: "/create-order",
         element: <CreateOrderPage />,
       },
@@ -71,6 +82,10 @@ export const router = createBrowserRouter([
       {
         path: "/services/b2b",
         element: <B2BPage />,
+      },
+      {
+        path: "/abouts/about",
+        element: <AboutPage />,
       },
     ],
   },

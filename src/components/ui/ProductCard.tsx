@@ -3,8 +3,8 @@ import "@/components/ui/ProductCard.css";
 import Go from "@/assets/icons/go.svg?react";
 
 type Props = {
-  image: string;
-  title: string;
+  image?: string;
+  title?: string;
   to: string;
 };
 

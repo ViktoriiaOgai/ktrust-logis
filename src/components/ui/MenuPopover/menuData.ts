@@ -14,7 +14,7 @@ export const headerSections = [
   {
     title: "О КОМПАНИИ",
     items: [
-      { title: "О нас", href: "/about" },
+      { title: "О нас", href: "/abouts/about" },
       { title: "Тарифы", href: "/prices" },
       { title: "Отзывы", href: "/reviews" },
       { title: "FAQ", href: "/faq" },
@@ -26,9 +26,9 @@ export const headerSections = [
     items: [
       { title: "Адреса", href: "/" },
       { title: "Контакты", href: "/" },
-      { title: "Instagram", href: "/" },
-      { title: "WhatsApp", href: "/" },
-      { title: "Telegram", href: "/" },
+      { title: "Instagram", href: "https://www.instagram.com/ktrust.logis/" },
+      { title: "WhatsApp",  href: "https://api.whatsapp.com/send?phone=821026701303&text&type=phone_number&app_absent=0"},
+      { title: "Telegram", href: "https://t.me/ktrustlogis" },
     ],
   },
   

@@ -44,8 +44,8 @@ export default function Header() {
               Контакты
             </OrderButton>
 
-            <OrderButton className="order-btn" to="/create-order">
-              Оставить заявку <Go />
+            <OrderButton className="order-btn" to="/login">
+              Авторизация <Go />
             </OrderButton>
           </div>
         </div>

@@ -27,7 +27,6 @@ export default function CarDeliveryPage() {
     description="Если ваш бизнес связан с экспортом автомобилей, мы предлагаем решение, которое сделает этот процесс простым, прозрачным и безопасным.
     Вместо мелких отправок вы можете заказать целый контейнер через нашу компанию."
     buttonText="Оставить заявку"
-    buttonLink="/create-order"
     info={[
     {
       title: "Контейнерные перевозки без рисков",
@@ -72,7 +71,7 @@ export default function CarDeliveryPage() {
   description="Оставьте заявку, наш менеджер свяжется с вами и уточнит детали"
   buttonText="Оставить заявку"
   className="order-btn"
- onButtonClick={() => "/create-order"}
+
 />
      </div>
     <Footer />

@@ -11,9 +11,14 @@ import ComparisonTable from "@/components/ui/ComparisonTable";
 import { Comparison } from "@/data/delivery/Comparison";
 import FAQ from "@/components/sections/FAQ";
 import { personalFaq } from "@/data/delivery/faq/Faq";
+import { useState } from 'react';
+import Modal from "@/components/ui/Modal";
 
 
 export default function PersonalDeliveryPage() {
+   const [isOpen, setIsOpen] = useState(false);
+  const openModal = () => setIsOpen(true);
+  const closeModal = () => setIsOpen(false);
 
    return (
     <>
@@ -25,7 +30,7 @@ export default function PersonalDeliveryPage() {
     title="Личные посылки"
     description="Отправьте подарки или личные вещи родным — без нервов, переплат и “грузовой” бюрократии."
     buttonText="Сделать заявку"
-    buttonLink="/create-order"
+    onButtonClick={openModal}
     info={[
     {
       title: "Авиа или контейнером",
@@ -62,10 +67,24 @@ export default function PersonalDeliveryPage() {
   description="Оставьте заявку, наш менеджер свяжется с вами и уточнит детали"
   buttonText="Оставить заявку"
   className="order-btn"
- onButtonClick={() => "/create-order"}
-/>
+ />
      </div>
     <Footer />
+    {isOpen && (
+            <div className="modal-overlay" onClick={closeModal}>
+              <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                <Modal
+                isOpen={isOpen}
+      onClose={closeModal}
+                title="Получите консультацию"
+                message="Оставьте номер телефона, менеджер свяжется с Вами"/>
+                
+                <button className="modal-close" onClick={closeModal}>
+                  ✕
+                </button>
+              </div>
+            </div>
+          )}
     </>
   );
 }

@@ -51,14 +51,28 @@ export default function MenuPopover({
         <div key={section.title} className="menu-column">
           <h4>{section.title}</h4>
 
-          {section.items.map((item) => (
-            <Link
-              key={item.title}
-              to={item.href ?? "#"}
-            >
-              {item.title}
-            </Link>
-          ))}
+          {section.items.map((item) => {
+  const isExternal =
+    item.href?.startsWith("http");
+
+  return isExternal ? (
+    <a
+      key={item.title}
+      href={item.href}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      {item.title}
+    </a>
+  ) : (
+    <Link
+      key={item.title}
+      to={item.href ?? "#"}
+    >
+      {item.title}
+    </Link>
+  );
+})}
           
         </div>
         
@@ -90,9 +104,15 @@ export default function MenuPopover({
         </p>
 
         <div className="net-icons">
-          <Insta />
-          <WhatsApp />
-          <Telegram />
+          <a href="https://www.instagram.com/ktrust.logis/"
+  target="_blank"
+  rel="noopener noreferrer"><Insta /></a>
+          <a href="https://api.whatsapp.com/send?phone=821026701303&text&type=phone_number&app_absent=0"
+  target="_blank"
+  rel="noopener noreferrer"><WhatsApp /></a>
+          <a href="https://t.me/ktrustlogis"
+  target="_blank"
+  rel="noopener noreferrer"><Telegram /></a>
         </div>
       </div>
     )}

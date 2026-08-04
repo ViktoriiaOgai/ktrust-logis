@@ -26,7 +26,6 @@ export default function B2BPage() {
 
 Предприниматели, у нас хорошие новости! Теперь вы можете отправлять целые контейнеры прямо из Кореи в СНГ без задержек и неожиданных доплат."
     buttonText="Оставить заявку"
-    buttonLink="/create-order"
     info={[
     {
       title: "100% прозрачность",
@@ -65,7 +64,6 @@ export default function B2BPage() {
   description="Оставьте заявку, наш менеджер свяжется с вами и уточнит детали"
   buttonText="Оставить заявку"
   className="order-btn"
- onButtonClick={() => "/create-order"}
 />
      </div>
     <Footer />
