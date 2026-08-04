@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { customerService } from '@/services/customerService';
-import type { Customer, CustomersResponse, CustomerFilters, CustomerFormData } from '@/services/customerService';
+import type { Customer, CustomerFilters, CustomerFormData } from '@/services/customerService';
 import /* @import */ './CustomersPage.css';
 
 export default function CustomersPage() {
