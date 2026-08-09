@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import './LoginPage.css';
 
@@ -73,7 +73,7 @@ export default function LoginPage() {
         </form>
 
         <div className="login-page__footer">
-          <p>Don't have an account? <a href="/register">Register</a></p>
+          <p>Don't have an account? <Link to="/register">Register</Link></p>
         </div>
       </div>
     </div>
