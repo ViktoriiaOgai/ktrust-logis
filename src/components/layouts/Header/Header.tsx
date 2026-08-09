@@ -12,7 +12,7 @@ export default function Header() {
   const [menuType, setMenuType] = useState<
     "services" | "about" | "contacts" | null
   >(null);
-  const { user, logout, isAuthenticated } = useAuth();
+  const {logout, isAuthenticated } = useAuth();
 
   const handleLogout = () => {
     logout();

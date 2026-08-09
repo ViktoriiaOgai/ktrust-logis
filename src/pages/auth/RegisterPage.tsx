@@ -1,7 +1,18 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { apiClient } from '@/services/api';
 import './LoginPage.css';
+
+// Описываем интерфейс ответа от сервера
+interface RegisterResponse {
+  user: {
+    id: string;
+    email: string;
+    fullName: string;
+    role?: string;
+  };
+  token: string;
+}
 
 export default function RegisterPage() {
   const [fullName, setFullName] = useState('');
@@ -17,21 +28,26 @@ export default function RegisterPage() {
     setLoading(true);
 
     try {
+      // Приводим response.data к описанному типу с помощью "as"
       const response = await apiClient.post('/api/auth/register', {
         fullName,
         email,
         password,
       });
 
-      // Auto-login after registration
-      const { user, token } = response.data;
+      const { user, token } = response.data as RegisterResponse;
+      
       localStorage.setItem('token', token);
       localStorage.setItem('user', JSON.stringify(user));
       apiClient.setToken(token);
       
       navigate('/dashboard');
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Registration failed');
+    } catch (err: any) {
+      // Обработка ошибки с поддержкой Axios / custom error
+      const message =
+        err?.response?.data?.message ||
+        (err instanceof Error ? err.message : 'Registration failed');
+      setError(message);
     } finally {
       setLoading(false);
     }
@@ -97,7 +113,8 @@ export default function RegisterPage() {
         </form>
 
         <div className="login-page__footer">
-          <p>Already have an account? <a href="/login">Login</a></p>
+          {/* Используем Link из react-router-dom вместо обычного <a> */}
+          <p>Already have an account? <Link to="/login">Login</Link></p>
         </div>
       </div>
     </div>
