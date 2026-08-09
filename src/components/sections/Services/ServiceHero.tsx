@@ -92,21 +92,21 @@ export default function ServiceHero({
         </div>
       </div>
 
-      {isOpen && (
-              <div className="modal-overlay" onClick={closeModal}>
-                <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-                  <Modal
-                  isOpen={isOpen}
+     {isOpen && (
+  <div className="modal-overlay" onClick={closeModal}>
+    <div
+      className="modal-content"
+      onClick={(e) => e.stopPropagation()}
+    >
+      <Modal
+        isOpen={isOpen}
         onClose={closeModal}
-                  title="Получите консультацию"
-                  message="Оставьте номер телефона, менеджер свяжется с Вами"/>
-                  
-                  <button className="modal-close" onClick={closeModal}>
-                    ✕
-                  </button>
-                </div>
-              </div>
-            )}
+        title="Получите консультацию"
+        message="Оставьте номер телефона, менеджер свяжется с Вами"
+      />
+    </div>
+  </div>
+)}
     </section>
   );
 }

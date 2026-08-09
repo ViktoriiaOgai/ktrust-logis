@@ -72,6 +72,34 @@ export const customerValidator = [
     .withMessage('Company name must not exceed 100 characters'),
 ];
 
+export const customerFiltersValidator = [
+  query('search')
+    .optional()
+    .trim()
+    .isLength({ max: 100 })
+    .withMessage('Search term must not exceed 100 characters'),
+  query('city')
+    .optional()
+    .trim()
+    .isLength({ max: 100 })
+    .withMessage('City must not exceed 100 characters'),
+  query('country')
+    .optional()
+    .trim()
+    .isLength({ max: 100 })
+    .withMessage('Country must not exceed 100 characters'),
+  query('sortBy')
+    .optional()
+    .trim()
+    .isIn(['created_at', 'updated_at', 'name', 'email', 'phone'])
+    .withMessage('Invalid sort field'),
+  query('sortOrder')
+    .optional()
+    .trim()
+    .isIn(['ASC', 'DESC'])
+    .withMessage('Sort order must be ASC or DESC'),
+];
+
 // Order validators
 export const orderValidator = [
   body('customerId')
@@ -210,6 +238,143 @@ export const userFiltersValidator = [
     .trim()
     .isIn(['true', 'false'])
     .withMessage('isActive must be true or false'),
+  query('sortBy')
+    .optional()
+    .trim()
+    .isIn(['created_at', 'updated_at', 'full_name', 'email', 'role'])
+    .withMessage('Invalid sort field'),
+  query('sortOrder')
+    .optional()
+    .trim()
+    .isIn(['ASC', 'DESC'])
+    .withMessage('Sort order must be ASC or DESC'),
+];
+
+export const orderFiltersValidator = [
+  query('search')
+    .optional()
+    .trim()
+    .isLength({ max: 100 })
+    .withMessage('Search term must not exceed 100 characters'),
+  query('status')
+    .optional()
+    .trim()
+    .isIn([
+      'Draft',
+      'Registered',
+      'In Warehouse',
+      'In Transit',
+      'Arrived at Destination',
+      'Out for Delivery',
+      'Delivered',
+      'Delivery Failed',
+      'Delayed',
+      'Returned',
+      'Cancelled',
+    ])
+    .withMessage('Invalid status'),
+  query('customerId')
+    .optional()
+    .isInt()
+    .withMessage('Customer ID must be an integer'),
+  query('courierId')
+    .optional()
+    .isInt()
+    .withMessage('Courier ID must be an integer'),
+  query('originCity')
+    .optional()
+    .trim()
+    .isLength({ max: 100 })
+    .withMessage('Origin city must not exceed 100 characters'),
+  query('destinationCity')
+    .optional()
+    .trim()
+    .isLength({ max: 100 })
+    .withMessage('Destination city must not exceed 100 characters'),
+  query('dateFrom')
+    .optional()
+    .isISO8601()
+    .withMessage('Invalid date format'),
+  query('dateTo')
+    .optional()
+    .isISO8601()
+    .withMessage('Invalid date format'),
+  query('sortBy')
+    .optional()
+    .trim()
+    .isIn(['created_at', 'updated_at', 'tracking_number', 'current_status', 'origin_city', 'destination_city'])
+    .withMessage('Invalid sort field'),
+  query('sortOrder')
+    .optional()
+    .trim()
+    .isIn(['ASC', 'DESC'])
+    .withMessage('Sort order must be ASC or DESC'),
+];
+
+export const assignCourierValidator = [
+  param('id')
+    .isInt()
+    .withMessage('Order ID must be an integer'),
+  body('courierId')
+    .notEmpty()
+    .withMessage('Courier ID is required')
+    .isInt()
+    .withMessage('Courier ID must be an integer'),
+];
+
+export const statusUpdateValidator = [
+  param('id')
+    .isInt()
+    .withMessage('Order ID must be an integer'),
+  body('newStatus')
+    .trim()
+    .notEmpty()
+    .withMessage('New status is required')
+    .isIn([
+      'Draft',
+      'Registered',
+      'In Warehouse',
+      'In Transit',
+      'Arrived at Destination',
+      'Out for Delivery',
+      'Delivered',
+      'Delivery Failed',
+      'Delayed',
+      'Returned',
+      'Cancelled',
+    ])
+    .withMessage('Invalid status'),
+  body('comment')
+    .optional()
+    .trim()
+    .isLength({ max: 500 })
+    .withMessage('Comment must not exceed 500 characters'),
+];
+
+// Dashboard validators
+export const dashboardStatsValidator = [
+  query('dateFrom')
+    .optional()
+    .isISO8601()
+    .withMessage('Invalid date format for dateFrom'),
+  query('dateTo')
+    .optional()
+    .isISO8601()
+    .withMessage('Invalid date format for dateTo'),
+];
+
+export const trendsValidator = [
+  query('days')
+    .optional()
+    .isInt({ min: 1, max: 365 })
+    .withMessage('Days must be between 1 and 365'),
+];
+
+export const topCouriersValidator = [
+  query('limit')
+    .optional()
+    .isInt({ min: 1, max: 20 })
+    .withMessage('Limit must be between 1 and 20'),
 ];
 
 // Pagination validators

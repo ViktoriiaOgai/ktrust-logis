@@ -6,11 +6,17 @@ import { useState } from "react";
 import MenuPopover from "@/components/ui/MenuPopover/MenuPopover";
 import { headerSections} from "@/components/ui/MenuPopover/menuData";
 import { Link } from "react-router-dom";
+import { useAuth } from "@/context/AuthContext";
 
 export default function Header() {
   const [menuType, setMenuType] = useState<
     "services" | "about" | "contacts" | null
   >(null);
+  const {logout, isAuthenticated } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+  };
  
   return (
     <>
@@ -44,9 +50,23 @@ export default function Header() {
               Контакты
             </OrderButton>
 
-            <OrderButton className="order-btn" to="/login">
-              Авторизация <Go />
-            </OrderButton>
+            {isAuthenticated ? (
+              <>
+                <OrderButton className="order-btn" to="/dashboard">
+                  Dashboard <Go />
+                </OrderButton>
+                <OrderButton 
+                  className="menu-btn" 
+                  onClick={handleLogout}
+                >
+                  Logout
+                </OrderButton>
+              </>
+            ) : (
+              <OrderButton className="order-btn" to="/login">
+                Авторизация <Go />
+              </OrderButton>
+            )}
           </div>
         </div>
       </header>

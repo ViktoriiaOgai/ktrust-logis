@@ -4,7 +4,7 @@ import { successResponse, errorResponse } from '../utils/index.js';
 export const customerController = {
   async getAllCustomers(req, res, next) {
     try {
-      const { page, limit, search, city, country } = req.query;
+      const { page, limit, search, city, country, sortBy, sortOrder } = req.query;
 
       const result = await customerService.getAllCustomers({
         page: page ? parseInt(page) : 1,
@@ -12,6 +12,8 @@ export const customerController = {
         search: search || '',
         city: city || '',
         country: country || '',
+        sortBy: sortBy || 'created_at',
+        sortOrder: sortOrder || 'DESC',
       });
 
       return successResponse(res, result, 'Customers retrieved successfully');
