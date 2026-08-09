@@ -1,7 +1,7 @@
 import express from 'express';
 import { customerController } from '../controllers/index.js';
 import { authenticate, authorize } from '../middleware/index.js';
-import { paginationValidator, customerValidator, idValidator } from '../utils/index.js';
+import { paginationValidator, customerValidator, idValidator, customerFiltersValidator } from '../utils/index.js';
 import { validate } from '../middleware/validator.js';
 
 const router = express.Router();
@@ -10,7 +10,7 @@ const router = express.Router();
 router.use(authenticate);
 
 // Get all customers with pagination, search, and filters (Admin, Operator)
-router.get('/', authorize('Admin', 'Operator'), paginationValidator, validate, customerController.getAllCustomers);
+router.get('/', authorize('Admin', 'Operator'), paginationValidator, customerFiltersValidator, validate, customerController.getAllCustomers);
 
 // Get customer by ID (Admin, Operator)
 router.get('/:id', authorize('Admin', 'Operator'), idValidator, validate, customerController.getCustomerById);

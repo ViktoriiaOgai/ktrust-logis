@@ -1,6 +1,8 @@
 import { useState, useRef, useEffect } from "react";
-import OrderButton from "@/components/ui/OrderButton";
 import "@/components/ui/Modal.css";
+import { useNavigate } from "react-router-dom";
+import OrderButton from "@/components/ui/OrderButton";
+
 
 // Иконки
 import PhoneIcon from "@/assets/icons/phone.svg?react";
@@ -13,14 +15,14 @@ interface ModalProps {
   title: string;
   message: string;
   buttonText?: string;
+  className?: string;
+  onButtonClick?: () => void;
   onClose?: () => void;
-  onAccept?: () => void;
-  onCancel?: () => void;
 }
 
 type ContactMethod = "phone" | "whatsapp" | "telegram";
 
-// Словарь стран с ISO-кодами для картинок флагов
+// Список стран
 const COUNTRY_LIST = [
   { code: "+7", iso: "ru", name: "Россия" },
   { code: "+7", iso: "kz", name: "Казахстан" },
@@ -34,18 +36,22 @@ export default function Modal({
   isOpen = true,
   title,
   message,
-  buttonText = "Отправить",
+  buttonText = "Отправить заявку",
   onClose,
-  onAccept,
-  onCancel,
 }: ModalProps) {
-  const [contactMethod, setContactMethod] = useState<ContactMethod>("phone");
-  const [isCountrySelectorOpen, setIsCountrySelectorOpen] = useState(false);
+  const navigate = useNavigate();
+  const [contactMethod, setContactMethod] =
+    useState<ContactMethod>("phone");
+
+  const [isCountrySelectorOpen, setIsCountrySelectorOpen] =
+    useState(false);
+
   const countrySelectorRef = useRef<HTMLDivElement>(null);
 
   const [formData, setFormData] = useState({
     name: "",
-    comment: "",
+    address: "",
+    cargoName: "",
     contact: "",
     currentCountryCode: "+7",
   });
@@ -60,14 +66,24 @@ export default function Modal({
         setIsCountrySelectorOpen(false);
       }
     }
+
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
   }, []);
 
   if (!isOpen) return null;
 
-  const handleInputChange = (field: string, value: string) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
+  const handleInputChange = (
+    field: keyof typeof formData,
+    value: string,
+  ) => {
+    setFormData((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
   };
 
   const handleCountrySelect = (countryCode: string) => {
@@ -76,6 +92,7 @@ export default function Modal({
       currentCountryCode: countryCode,
       contact: countryCode,
     }));
+
     setIsCountrySelectorOpen(false);
   };
 
@@ -83,91 +100,180 @@ export default function Modal({
     switch (contactMethod) {
       case "telegram":
         return "@username или +7 (999) 000-00-00";
+
       case "whatsapp":
         return "Номер WhatsApp";
+
       case "phone":
       default:
         return "Номер телефона";
     }
   };
 
-  // Находим объект выбранной страны
+  // Текущая выбранная страна
   const currentCountry =
-    COUNTRY_LIST.find((c) => c.code === formData.currentCountryCode) || COUNTRY_LIST[0];
+    COUNTRY_LIST.find(
+      (country) => country.code === formData.currentCountryCode,
+    ) || COUNTRY_LIST[0];
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-container" onClick={(e) => e.stopPropagation()}>
-        {onClose && (
-          <button type="button" className="modal-close-outer" onClick={onClose}>
-            ✕
-          </button>
-        )}
+    <div
+      className="modal-container"
+      onClick={(e) => e.stopPropagation()}
+    >
+      {onClose && (
+      <button
+        type="button"
+        className="modal-close-outer"
+        onClick={onClose}
+        aria-label="Закрыть"
+      >
+        ✕
+      </button>
+    )}
 
-        <div className="modal">
-          <h3>{title}</h3>
-          <p>{message}</p>
+      <div className="modal">
+        <h3>{title}</h3>
 
-          {/* --- ФОРМА --- */}
-          <div className="modal-form">
-            <div className="input-group">
-              <input
-                type="text"
-                placeholder="Ваше имя"
-                value={formData.name}
-                onChange={(e) => handleInputChange("name", e.target.value)}
-              />
-            </div>
+        <p>{message}</p>
 
-            <div className="input-group">
-              <input
-                type="text"
-                placeholder="Комментарий или детали заказа"
-                value={formData.comment}
-                onChange={(e) => handleInputChange("comment", e.target.value)}
-              />
-            </div>
+        {/* ФОРМА */}
+        <div className="modal-form">
+          {/* Имя */}
+          <div className="input-group">
+            <label
+              htmlFor="recipient-name"
+              className="input-label"
+            >
+              Ваше имя
+            </label>
 
-            {/* Способы связи */}
+            <input
+              id="recipient-name"
+              type="text"
+              placeholder="Введите"
+              value={formData.name}
+              onChange={(e) =>
+                handleInputChange("name", e.target.value)
+              }
+            />
+          </div>
+
+          {/* Адрес получателя */}
+          <div className="input-group">
+            <label
+              htmlFor="recipient-address"
+              className="input-label"
+            >
+              Адрес получателя
+            </label>
+
+            <input
+              id="recipient-address"
+              type="text"
+              placeholder="Введите"
+              value={formData.address}
+              onChange={(e) =>
+                handleInputChange("address", e.target.value)
+              }
+            />
+          </div>
+
+          {/* Наименование груза */}
+          <div className="input-group">
+            <label
+              htmlFor="cargo-name"
+              className="input-label"
+            >
+              Наименование груза
+            </label>
+
+            <input
+              id="cargo-name"
+              type="text"
+              placeholder="Введите"
+              value={formData.cargoName}
+              onChange={(e) =>
+                handleInputChange("cargoName", e.target.value)
+              }
+            />
+          </div>
+
+          {/* Способ связи */}
+          <div className="contact-methods-group">
+            <label className="input-label">
+              Как с вами связаться?
+            </label>
+
             <div className="contact-methods">
               <button
                 type="button"
-                className={`method-btn ${contactMethod === "phone" ? "active" : ""}`}
+                className={`method-btn ${
+                  contactMethod === "phone" ? "active" : ""
+                }`}
                 onClick={() => setContactMethod("phone")}
               >
-                <PhoneIcon /> Телефон
+                <PhoneIcon />
+                Телефон
               </button>
+
               <button
                 type="button"
-                className={`method-btn ${contactMethod === "telegram" ? "active" : ""}`}
+                className={`method-btn ${
+                  contactMethod === "telegram" ? "active" : ""
+                }`}
                 onClick={() => setContactMethod("telegram")}
               >
-                <TelegramIcon /> Telegram
+                <TelegramIcon />
+                Telegram
               </button>
+
               <button
                 type="button"
-                className={`method-btn ${contactMethod === "whatsapp" ? "active" : ""}`}
+                className={`method-btn ${
+                  contactMethod === "whatsapp" ? "active" : ""
+                }`}
                 onClick={() => setContactMethod("whatsapp")}
               >
-                <WhatsappIcon /> WhatsApp
+                <WhatsappIcon />
+                WhatsApp
               </button>
             </div>
+          </div>
 
-            {/* Ввод номера с выбором страны */}
+          {/* Контактные данные */}
+          <div className="input-group dynamic-contact-group">
+            <label
+              htmlFor="contact"
+              className="input-label"
+            >
+              Контактные данные
+            </label>
+
             <div className="input-group dynamic-contact combined-input">
-              {(contactMethod === "phone" || contactMethod === "whatsapp") && (
-                <div className="country-selector-wrapper" ref={countrySelectorRef}>
+              {/* Выбор страны */}
+              {(contactMethod === "phone" ||
+                contactMethod === "whatsapp") && (
+                <div
+                  className="country-selector-wrapper"
+                  ref={countrySelectorRef}
+                >
                   <button
                     type="button"
                     className="country-select-trigger"
-                    onClick={() => setIsCountrySelectorOpen(!isCountrySelectorOpen)}
+                    onClick={() =>
+                      setIsCountrySelectorOpen(
+                        !isCountrySelectorOpen,
+                      )
+                    }
+                    aria-label="Выбрать страну"
                   >
-                    {/* Рендерим тег img с ссылкой на флаг по ISO */}
                     <img
                       src={`https://flagcdn.com/w40/${currentCountry.iso}.png`}
                       alt={currentCountry.name}
                       className="selected-flag-img"
                     />
+
                     <Down className="arrow-icon" />
                   </button>
 
@@ -177,15 +283,23 @@ export default function Modal({
                         <li
                           key={`${country.code}-${country.name}`}
                           className="country-option"
-                          onClick={() => handleCountrySelect(country.code)}
+                          onClick={() =>
+                            handleCountrySelect(country.code)
+                          }
                         >
                           <img
                             src={`https://flagcdn.com/w40/${country.iso}.png`}
                             alt={country.name}
                             className="option-flag-img"
                           />
-                          <span className="option-code">{country.code}</span>
-                          <span className="option-name">{country.name}</span>
+
+                          <span className="option-code">
+                            {country.code}
+                          </span>
+
+                          <span className="option-name">
+                            {country.name}
+                          </span>
                         </li>
                       ))}
                     </ul>
@@ -194,44 +308,41 @@ export default function Modal({
               )}
 
               <input
+                id="contact"
                 type="text"
                 placeholder={getContactPlaceholder()}
                 value={formData.contact}
                 onChange={(e) => {
                   let value = e.target.value;
+
                   if (
-                    (contactMethod === "phone" || contactMethod === "whatsapp") &&
-                    !value.startsWith(formData.currentCountryCode) &&
+                    (contactMethod === "phone" ||
+                      contactMethod === "whatsapp") &&
+                    !value.startsWith(
+                      formData.currentCountryCode,
+                    ) &&
                     value !== ""
                   ) {
-                    value = formData.currentCountryCode + value;
+                    value =
+                      formData.currentCountryCode + value;
                   }
+
                   handleInputChange("contact", value);
                 }}
               />
             </div>
           </div>
-
-          {/* --- КНОПКИ ДЕЙСТВИЯ --- */}
-          <div className="modal-actions">
-            {onAccept || onCancel ? (
-              <>
-                {onCancel && (
-                  <OrderButton className="modal-cancel" onClick={onCancel}>
-                    Отмена
-                  </OrderButton>
-                )}
-                {onAccept && (
-                  <OrderButton className="modal-accept" onClick={onAccept}>
-                    Подтвердить
-                  </OrderButton>
-                )}
-              </>
-            ) : (
-              <OrderButton onClick={onClose}>{buttonText}</OrderButton>
-            )}
-          </div>
         </div>
+
+        {/* КНОПКА */}
+    <div className="modal-actions">
+  <OrderButton
+  className="order-btn"
+  onClick={() => navigate("/create-order")}
+>
+  {buttonText}
+</OrderButton>
+</div>
       </div>
     </div>
   );

@@ -4,6 +4,7 @@ import { createBrowserRouter } from "react-router-dom";
 import HomePage from "@/pages/client/HomePage";
 import TrackingPage from "@/pages/client/TrackingPage";
 import LoginPage from "@/pages/auth/LoginPage";
+import RegisterPage from "@/pages/auth/RegisterPage";
 import DashboardPage from "@/pages/admin/DashboardPage";
 import OrdersPage from "@/pages/admin/OrdersPage";
 import OrderDetailsPage from "@/pages/admin/OrderDetailsPage";
@@ -18,6 +19,8 @@ import CarDeliveryPage from "@/pages/client/Services/CarDeliveryPage";
 import B2BPage from "@/pages/client/Services/B2BPage";
 import RootLayout from "@/components/layouts/RootLayout";
 import AboutPage from "@/pages/client/Abouts/AboutPage";
+import ProtectedRoute from "@/components/auth/ProtectedRoute";
+import RoleBasedRoute from "@/components/auth/RoleBasedRoute";
 
 export const router = createBrowserRouter([
   {
@@ -36,28 +39,68 @@ export const router = createBrowserRouter([
         element: <LoginPage />,
       },
       {
+        path: "/register",
+        element: <RegisterPage />,
+      },
+      {
         path: "/dashboard",
-        element: <DashboardPage />,
+        element: (
+          <ProtectedRoute>
+            <RoleBasedRoute allowedRoles={['Admin', 'Operator']}>
+              <DashboardPage />
+            </RoleBasedRoute>
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/orders",
-        element: <OrdersPage />,
+        element: (
+          <ProtectedRoute>
+            <RoleBasedRoute allowedRoles={['Admin', 'Operator', 'Courier']}>
+              <OrdersPage />
+            </RoleBasedRoute>
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/orders/:id",
-        element: <OrderDetailsPage />,
+        element: (
+          <ProtectedRoute>
+            <RoleBasedRoute allowedRoles={['Admin', 'Operator', 'Courier']}>
+              <OrderDetailsPage />
+            </RoleBasedRoute>
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/users",
-        element: <UsersPage />,
+        element: (
+          <ProtectedRoute>
+            <RoleBasedRoute allowedRoles={['Admin']}>
+              <UsersPage />
+            </RoleBasedRoute>
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/customers",
-        element: <CustomersPage />,
+        element: (
+          <ProtectedRoute>
+            <RoleBasedRoute allowedRoles={['Admin', 'Operator']}>
+              <CustomersPage />
+            </RoleBasedRoute>
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/create-order",
-        element: <CreateOrderPage />,
+        element: (
+          <ProtectedRoute>
+            <RoleBasedRoute allowedRoles={['Admin', 'Operator']}>
+              <CreateOrderPage />
+            </RoleBasedRoute>
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/services/air",

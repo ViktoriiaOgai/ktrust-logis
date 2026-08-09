@@ -4,7 +4,7 @@ import { successResponse, errorResponse } from '../utils/index.js';
 export const userController = {
   async getAllUsers(req, res, next) {
     try {
-      const { page, limit, search, role, isActive } = req.query;
+      const { page, limit, search, role, isActive, sortBy, sortOrder } = req.query;
 
       const result = await userService.getAllUsers({
         page: page ? parseInt(page) : 1,
@@ -12,6 +12,8 @@ export const userController = {
         search: search || '',
         role: role || '',
         isActive,
+        sortBy: sortBy || 'created_at',
+        sortOrder: sortOrder || 'DESC',
       });
 
       return successResponse(res, result, 'Users retrieved successfully');

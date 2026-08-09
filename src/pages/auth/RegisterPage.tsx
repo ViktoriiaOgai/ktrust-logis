@@ -1,14 +1,14 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '@/context/AuthContext';
+import { apiClient } from '@/services/api';
 import './LoginPage.css';
 
-export default function LoginPage() {
+export default function RegisterPage() {
+  const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -17,10 +17,21 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      await login(email, password);
+      const response = await apiClient.post('/api/auth/register', {
+        fullName,
+        email,
+        password,
+      });
+
+      // Auto-login after registration
+      const { user, token } = response.data;
+      localStorage.setItem('token', token);
+      localStorage.setItem('user', JSON.stringify(user));
+      apiClient.setToken(token);
+      
       navigate('/dashboard');
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Login failed');
+      setError(err instanceof Error ? err.message : 'Registration failed');
     } finally {
       setLoading(false);
     }
@@ -35,9 +46,21 @@ export default function LoginPage() {
         </div>
 
         <form onSubmit={handleSubmit} className="login-page__form">
-          <h2>Login</h2>
+          <h2>Register</h2>
 
           {error && <div className="login-page__error">{error}</div>}
+
+          <div className="login-page__form-group">
+            <label htmlFor="fullName">Full Name</label>
+            <input
+              type="text"
+              id="fullName"
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+              required
+              placeholder="Enter your full name"
+            />
+          </div>
 
           <div className="login-page__form-group">
             <label htmlFor="email">Email</label>
@@ -59,7 +82,8 @@ export default function LoginPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              placeholder="Enter your password"
+              placeholder="Enter your password (min 8 characters)"
+              minLength={8}
             />
           </div>
 
@@ -68,12 +92,12 @@ export default function LoginPage() {
             className="login-page__submit-btn"
             disabled={loading}
           >
-            {loading ? 'Logging in...' : 'Login'}
+            {loading ? 'Registering...' : 'Register'}
           </button>
         </form>
 
         <div className="login-page__footer">
-          <p>Don't have an account? <a href="/register">Register</a></p>
+          <p>Already have an account? <a href="/login">Login</a></p>
         </div>
       </div>
     </div>

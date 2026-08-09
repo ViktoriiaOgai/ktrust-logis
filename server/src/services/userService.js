@@ -1,64 +1,39 @@
 import pool from '../config/database.js';
+import { QueryBuilder, executePaginatedQuery } from '../utils/index.js';
 
 export const userService = {
-  async getAllUsers({ page = 1, limit = 10, search = '', role = '', isActive = null }) {
-    const offset = (page - 1) * limit;
-    
-    // Build WHERE conditions
-    const conditions = [];
-    const params = [];
-    let paramIndex = 1;
-
-    if (search) {
-      conditions.push(`(full_name ILIKE $${paramIndex} OR email ILIKE $${paramIndex})`);
-      params.push(`%${search}%`);
-      paramIndex++;
-    }
-
-    if (role) {
-      conditions.push(`role = $${paramIndex}`);
-      params.push(role);
-      paramIndex++;
-    }
-
-    if (isActive !== null && isActive !== undefined && isActive !== '') {
-      conditions.push(`is_active = $${paramIndex}`);
-      params.push(isActive === 'true' || isActive === true);
-      paramIndex++;
-    }
-
-    const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
-
-    // Get total count
-    const countQuery = `
-      SELECT COUNT(*) as total
-      FROM users
-      ${whereClause}
-    `;
-    
-    const countResult = await pool.query(countQuery, params);
-    const total = parseInt(countResult.rows[0].total);
-
-    // Get users
-    const usersQuery = `
+  async getAllUsers({ page = 1, limit = 10, search = '', role = '', isActive = null, sortBy = 'created_at', sortOrder = 'DESC' }) {
+    const baseQuery = `
       SELECT id, full_name, email, role, is_active, created_at, updated_at
       FROM users
-      ${whereClause}
-      ORDER BY created_at DESC
-      LIMIT $${paramIndex} OFFSET $${paramIndex + 1}
     `;
-    
-    params.push(limit, offset);
-    const usersResult = await pool.query(usersQuery, params);
+
+    const queryBuilder = new QueryBuilder(baseQuery, 'users');
+
+    // Add search condition
+    if (search) {
+      queryBuilder.addSearch(['full_name', 'email'], search);
+    }
+
+    // Add role filter
+    if (role) {
+      queryBuilder.addExactMatch('role', role);
+    }
+
+    // Add active status filter
+    if (isActive !== null && isActive !== undefined && isActive !== '') {
+      queryBuilder.addExactMatch('is_active', isActive === 'true' || isActive === true);
+    }
+
+    // Add sorting
+    queryBuilder.setOrderBy(sortBy, sortOrder);
+
+    // Execute paginated query
+    const result = await executePaginatedQuery(pool, queryBuilder, page, limit);
 
     return {
-      users: usersResult.rows,
-      pagination: {
-        page: parseInt(page),
-        limit: parseInt(limit),
-        total,
-        totalPages: Math.ceil(total / limit),
-      },
+      users: result.data,
+      pagination: result.pagination,
     };
   },
 
