@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { userService } from '@/services/userService';
-import type { User, UserFilters } from '@/services/userService';
+import type { User, UserFilters, CreateUserRequest } from '@/services/userService';
+import LoadingSpinner from '@/components/ui/LoadingSpinner';
+import EmptyState from '@/components/ui/EmptyState';
 import './UsersPage.css';
 
 export default function UsersPage() {
@@ -20,6 +22,16 @@ export default function UsersPage() {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [createForm, setCreateForm] = useState<CreateUserRequest>({
+    fullName: '',
+    email: '',
+    password: '',
+    role: 'Operator',
+    phone: '',
+  });
+  const [createLoading, setCreateLoading] = useState(false);
+  const [createError, setCreateError] = useState<string | null>(null);
 
   const fetchUsers = async () => {
     setLoading(true);
@@ -82,16 +94,54 @@ export default function UsersPage() {
     }
   };
 
+  const handleCreateUser = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setCreateLoading(true);
+    setCreateError(null);
+
+    try {
+      await userService.createUser(createForm);
+      setShowCreateModal(false);
+      setCreateForm({
+        fullName: '',
+        email: '',
+        password: '',
+        role: 'Operator',
+        phone: '',
+      });
+      fetchUsers();
+    } catch (err) {
+      setCreateError(err instanceof Error ? err.message : 'Failed to create user');
+    } finally {
+      setCreateLoading(false);
+    }
+  };
+
+  const handlePhoneUpdate = async (userId: number, phone: string) => {
+    try {
+      await userService.updateUserPhone(userId, phone);
+      fetchUsers();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to update phone');
+    }
+  };
+
   return (
     <div className="users-page">
       <div className="users-page__header">
-        <h1>User Management</h1>
+        <h1>Управление пользователями</h1>
+        <button
+          onClick={() => setShowCreateModal(true)}
+          className="users-page__create-btn"
+        >
+          + Создать пользователя
+        </button>
       </div>
 
       <div className="users-page__filters">
         <input
           type="text"
-          placeholder="Search by name or email..."
+          placeholder="Поиск по имени или email..."
           value={filters.search}
           onChange={handleSearchChange}
           className="users-page__search"
@@ -102,10 +152,11 @@ export default function UsersPage() {
           onChange={handleRoleFilterChange}
           className="users-page__filter"
         >
-          <option value="">All Roles</option>
-          <option value="Admin">Admin</option>
-          <option value="Operator">Operator</option>
-          <option value="Courier">Courier</option>
+          <option value="">Все роли</option>
+          <option value="Admin">Администратор</option>
+          <option value="Operator">Оператор</option>
+          <option value="Courier">Курьер</option>
+          <option value="User">Пользователь</option>
         </select>
 
         <select
@@ -117,16 +168,22 @@ export default function UsersPage() {
           onChange={handleActiveFilterChange}
           className="users-page__filter"
         >
-          <option value="">All Status</option>
-          <option value="true">Active</option>
-          <option value="false">Inactive</option>
+          <option value="">Все статусы</option>
+          <option value="true">Активен</option>
+          <option value="false">Неактивен</option>
         </select>
       </div>
 
       {error && <div className="users-page__error">{error}</div>}
 
       {loading ? (
-        <div className="users-page__loading">Loading...</div>
+        <LoadingSpinner message="Loading users..." />
+      ) : users.length === 0 ? (
+        <EmptyState
+          icon="👥"
+          title="No users found"
+          message="No users match your current filters. Try adjusting your search criteria."
+        />
       ) : (
         <>
           <div className="users-page__table-wrapper">
@@ -134,12 +191,13 @@ export default function UsersPage() {
               <thead>
                 <tr>
                   <th>ID</th>
-                  <th>Name</th>
+                  <th>Имя</th>
                   <th>Email</th>
-                  <th>Role</th>
-                  <th>Status</th>
-                  <th>Created</th>
-                  <th>Actions</th>
+                  <th>Телефон</th>
+                  <th>Роль</th>
+                  <th>Статус</th>
+                  <th>Создан</th>
+                  <th>Действия</th>
                 </tr>
               </thead>
               <tbody>
@@ -149,14 +207,29 @@ export default function UsersPage() {
                     <td>{user.full_name}</td>
                     <td>{user.email}</td>
                     <td>
+                      {user.role === 'Operator' ? (
+                        <input
+                          type="text"
+                          value={user.phone || ''}
+                          onChange={(e) => handlePhoneUpdate(user.id, e.target.value)}
+                          className="users-page__phone-input"
+                          placeholder="Add phone..."
+                          onBlur={(e) => handlePhoneUpdate(user.id, e.target.value)}
+                        />
+                      ) : (
+                        <span>{user.phone || '-'}</span>
+                      )}
+                    </td>
+                    <td>
                       <select
                         value={user.role}
                         onChange={(e) => handleRoleUpdate(user.id, e.target.value)}
                         className="users-page__role-select"
                       >
-                        <option value="Admin">Admin</option>
-                        <option value="Operator">Operator</option>
-                        <option value="Courier">Courier</option>
+                        <option value="Admin">Администратор</option>
+                        <option value="Operator">Оператор</option>
+                        <option value="Courier">Курьер</option>
+                        <option value="User">Пользователь</option>
                       </select>
                     </td>
                     <td>
@@ -165,7 +238,7 @@ export default function UsersPage() {
                           user.is_active ? 'active' : 'inactive'
                         }`}
                       >
-                        {user.is_active ? 'Active' : 'Inactive'}
+                        {user.is_active ? 'Активен' : 'Неактивен'}
                       </span>
                     </td>
                     <td>{new Date(user.created_at).toLocaleDateString()}</td>
@@ -176,7 +249,7 @@ export default function UsersPage() {
                           user.is_active ? 'deactivate' : 'activate'
                         }`}
                       >
-                        {user.is_active ? 'Deactivate' : 'Activate'}
+                        {user.is_active ? 'Деактивировать' : 'Активировать'}
                       </button>
                     </td>
                   </tr>
@@ -184,10 +257,6 @@ export default function UsersPage() {
               </tbody>
             </table>
           </div>
-
-          {users.length === 0 && !loading && (
-            <div className="users-page__empty">No users found</div>
-          )}
 
           {pagination.totalPages > 1 && (
             <div className="users-page__pagination">
@@ -211,6 +280,103 @@ export default function UsersPage() {
             </div>
           )}
         </>
+      )}
+
+      {showCreateModal && (
+        <div className="users-page__modal-overlay">
+          <div className="users-page__modal">
+            <div className="users-page__modal-header">
+              <h2>Создать нового пользователя</h2>
+              <button
+                onClick={() => setShowCreateModal(false)}
+                className="users-page__modal-close"
+              >
+                ×
+              </button>
+            </div>
+
+            <form onSubmit={handleCreateUser} className="users-page__modal-form">
+              {createError && <div className="users-page__modal-error">{createError}</div>}
+
+              <div className="users-page__form-group">
+                <label htmlFor="fullName">Полное имя</label>
+                <input
+                  type="text"
+                  id="fullName"
+                  value={createForm.fullName}
+                  onChange={(e) => setCreateForm({ ...createForm, fullName: e.target.value })}
+                  required
+                />
+              </div>
+
+              <div className="users-page__form-group">
+                <label htmlFor="email">Email</label>
+                <input
+                  type="email"
+                  id="email"
+                  value={createForm.email}
+                  onChange={(e) => setCreateForm({ ...createForm, email: e.target.value })}
+                  required
+                />
+              </div>
+
+              <div className="users-page__form-group">
+                <label htmlFor="password">Пароль</label>
+                <input
+                  type="password"
+                  id="password"
+                  value={createForm.password}
+                  onChange={(e) => setCreateForm({ ...createForm, password: e.target.value })}
+                  required
+                  minLength={8}
+                />
+              </div>
+
+              <div className="users-page__form-group">
+                <label htmlFor="role">Роль</label>
+                <select
+                  id="role"
+                  value={createForm.role}
+                  onChange={(e) => setCreateForm({ ...createForm, role: e.target.value as any })}
+                  required
+                >
+                  <option value="Admin">Администратор</option>
+                  <option value="Operator">Оператор</option>
+                  <option value="Courier">Курьер</option>
+                  <option value="User">Пользователь</option>
+                </select>
+              </div>
+
+              <div className="users-page__form-group">
+                <label htmlFor="phone">Телефон (для операторов)</label>
+                <input
+                  type="text"
+                  id="phone"
+                  value={createForm.phone}
+                  onChange={(e) => setCreateForm({ ...createForm, phone: e.target.value })}
+                  placeholder="+7 XXX XXX XX XX"
+                />
+              </div>
+
+              <div className="users-page__modal-actions">
+                <button
+                  type="button"
+                  onClick={() => setShowCreateModal(false)}
+                  className="users-page__modal-btn users-page__modal-btn--cancel"
+                >
+                  Отмена
+                </button>
+                <button
+                  type="submit"
+                  disabled={createLoading}
+                  className="users-page__modal-btn users-page__modal-btn--submit"
+                >
+                  {createLoading ? 'Создание...' : 'Создать пользователя'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
       )}
     </div>
   );

@@ -213,4 +213,5 @@ export async function executePaginatedQuery(pool, queryBuilder, page = 1, limit 
   };
 }
 
+export { QueryBuilder };
 export default QueryBuilder;

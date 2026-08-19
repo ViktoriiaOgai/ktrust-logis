@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import { customerService } from '@/services/customerService';
 import type { Customer, CustomerFilters, CustomerFormData } from '@/services/customerService';
-import /* @import */ './CustomersPage.css';
+import LoadingSpinner from '@/components/ui/LoadingSpinner';
+import EmptyState from '@/components/ui/EmptyState';
+import './CustomersPage.css';
 
 export default function CustomersPage() {
   const [customers, setCustomers] = useState<Customer[]>([]);
@@ -168,7 +170,17 @@ export default function CustomersPage() {
       {error && <div className="customers-page__error">{error}</div>}
 
       {loading ? (
-        <div className="customers-page__loading">Loading...</div>
+        <LoadingSpinner message="Loading customers..." />
+      ) : customers.length === 0 ? (
+        <EmptyState
+          icon="👥"
+          title="No customers found"
+          message="No customers match your current filters. Try adjusting your search criteria."
+          action={{
+            label: 'Create Customer',
+            onClick: () => setShowModal(true),
+          }}
+        />
       ) : (
         <>
           <div className="customers-page__table-wrapper">
@@ -214,10 +226,6 @@ export default function CustomersPage() {
               </tbody>
             </table>
           </div>
-
-          {customers.length === 0 && !loading && (
-            <div className="customers-page__empty">No customers found</div>
-          )}
 
           {pagination.totalPages > 1 && (
             <div className="customers-page__pagination">

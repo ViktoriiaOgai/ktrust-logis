@@ -12,7 +12,7 @@ export default function Header() {
   const [menuType, setMenuType] = useState<
     "services" | "about" | "contacts" | null
   >(null);
-  const {logout, isAuthenticated } = useAuth();
+  const {logout, isAuthenticated, user} = useAuth();
 
   const handleLogout = () => {
     logout();
@@ -52,14 +52,39 @@ export default function Header() {
 
             {isAuthenticated ? (
               <>
-                <OrderButton className="order-btn" to="/dashboard">
-                  Dashboard <Go />
-                </OrderButton>
-                <OrderButton 
-                  className="menu-btn" 
+                {/* Для обычных пользователей (User) - показываем личный кабинет */}
+                {user?.role === 'User' && (
+                  <OrderButton className="order-btn" to="/">
+                    Личный кабинет <Go />
+                  </OrderButton>
+                )}
+                
+                {/* Для операторов - ссылка на оператор панель */}
+                {user?.role === 'Operator' && (
+                  <OrderButton className="order-btn" to="/operator">
+                    Панель оператора <Go />
+                  </OrderButton>
+                )}
+                
+                {/* Для админов - ссылка на админ панель */}
+                {user?.role === 'Admin' && (
+                  <OrderButton className="order-btn" to="/admin">
+                    Админ панель <Go />
+                  </OrderButton>
+                )}
+                
+                {/* Для курьеров - ссылка на курьер панель */}
+                {user?.role === 'Courier' && (
+                  <OrderButton className="order-btn" to="/courier">
+                    Панель курьера <Go />
+                  </OrderButton>
+                )}
+                
+                <OrderButton
+                  className="menu-btn"
                   onClick={handleLogout}
                 >
-                  Logout
+                  Выйти
                 </OrderButton>
               </>
             ) : (

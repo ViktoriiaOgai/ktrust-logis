@@ -4,13 +4,19 @@ import { useAuth } from '@/context/AuthContext';
 interface RoleBasedRouteProps {
   children: React.ReactNode;
   allowedRoles: string[];
+  allowUnauthenticated?: boolean; // Добавляем параметр для неавторизованных пользователей
 }
 
-export default function RoleBasedRoute({ children, allowedRoles }: RoleBasedRouteProps) {
+export default function RoleBasedRoute({ children, allowedRoles, allowUnauthenticated = false }: RoleBasedRouteProps) {
   const { user, isAuthenticated, isLoading } = useAuth();
 
   if (isLoading) {
     return <div>Loading...</div>;
+  }
+
+  // Если разрешён доступ без авторизации (для обычных пользователей)
+  if (allowUnauthenticated && !isAuthenticated) {
+    return <>{children}</>;
   }
 
   if (!isAuthenticated) {
@@ -18,18 +24,7 @@ export default function RoleBasedRoute({ children, allowedRoles }: RoleBasedRout
   }
 
   if (!user || !allowedRoles.includes(user.role)) {
-    return (
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center', 
-        minHeight: '100vh',
-        flexDirection: 'column' 
-      }}>
-        <h1>Access Denied</h1>
-        <p>You don't have permission to access this page.</p>
-      </div>
-    );
+    return <Navigate to="/access-denied" replace />;
   }
 
   return <>{children}</>;

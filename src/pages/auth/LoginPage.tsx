@@ -8,7 +8,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { login } = useAuth();
+  const { loginWithToken } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -17,10 +17,54 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      await login(email, password);
-      navigate('/dashboard');
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Login failed');
+      const response = await fetch('http://localhost:3001/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Login failed');
+      }
+
+      localStorage.setItem('token', data.data.token);
+      localStorage.setItem('user', JSON.stringify(data.data.user));
+      
+      // Обновляем состояние в AuthContext
+      loginWithToken(data.data.user, data.data.token);
+
+      // Перенаправление в зависимости от роли
+      const userRole = data.data.user?.role;
+      let redirectUrl = '/';
+      
+      switch (userRole) {
+        case 'User':
+          redirectUrl = '/';
+          break;
+        case 'Operator':
+          redirectUrl = '/operator';
+          break;
+        case 'Admin':
+          redirectUrl = '/admin';
+          break;
+        case 'Courier':
+          redirectUrl = '/courier';
+          break;
+        default:
+          redirectUrl = '/';
+      }
+
+      navigate(redirectUrl);
+    } catch (err: any) {
+      const message = err instanceof Error ? err.message : 'Login failed';
+      setError(message);
     } finally {
       setLoading(false);
     }
@@ -31,11 +75,11 @@ export default function LoginPage() {
       <div className="login-page__container">
         <div className="login-page__header">
           <h1>KTrust Logistics</h1>
-          <p>CRM System</p>
+          <p>CRM Система</p>
         </div>
 
         <form onSubmit={handleSubmit} className="login-page__form">
-          <h2>Login</h2>
+          <h2>Вход</h2>
 
           {error && <div className="login-page__error">{error}</div>}
 
@@ -47,19 +91,19 @@ export default function LoginPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              placeholder="Enter your email"
+              placeholder="Введите ваш email"
             />
           </div>
 
           <div className="login-page__form-group">
-            <label htmlFor="password">Password</label>
+            <label htmlFor="password">Пароль</label>
             <input
               type="password"
               id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              placeholder="Enter your password"
+              placeholder="Введите ваш пароль"
             />
           </div>
 
@@ -68,12 +112,12 @@ export default function LoginPage() {
             className="login-page__submit-btn"
             disabled={loading}
           >
-            {loading ? 'Logging in...' : 'Login'}
+            {loading ? 'Вход...' : 'Войти'}
           </button>
         </form>
 
         <div className="login-page__footer">
-          <p>Don't have an account? <Link to="/register">Register</Link></p>
+          <p>Нет аккаунта? <Link to="/register">Зарегистрироваться</Link></p>
         </div>
       </div>
     </div>

@@ -4,3 +4,4 @@ export { customerService } from './customerService.js';
 export { orderService } from './orderService.js';
 export { statusService } from './statusService.js';
 export { dashboardService } from './dashboardService.js';
+export { operatorService } from './operatorService.js';

@@ -77,7 +77,7 @@ export interface OrderFormData {
   cargoType: string;
   declaredValue?: number;
   deliveryPrice?: number;
-  estimatedDeliveryDate?: string;
+  estimatedDeliveryDate?: string | null;
 }
 
 export const orderService = {
@@ -98,28 +98,36 @@ export const orderService = {
     const queryString = params.toString();
     const endpoint = `/api/orders${queryString ? `?${queryString}` : ''}`;
 
-    const response = await apiClient.get<OrdersResponse>(endpoint);
-    return response.data;
+    const response = await apiClient.get<{ items: Order[]; page: number; limit: number; total: number }>(endpoint);
+    return {
+      orders: response.items,
+      pagination: {
+        page: response.page,
+        limit: response.limit,
+        total: response.total,
+        totalPages: Math.ceil(response.total / response.limit),
+      },
+    };
   },
 
   async getOrderById(id: number): Promise<Order> {
     const response = await apiClient.get<{ order: Order }>(`/api/orders/${id}`);
-    return response.data.order;
+    return response.order;
   },
 
   async getOrderByTrackingNumber(trackingNumber: string): Promise<Order> {
     const response = await apiClient.get<{ order: Order }>(`/api/orders/tracking/${trackingNumber}`);
-    return response.data.order;
+    return response.order;
   },
 
   async createOrder(data: OrderFormData): Promise<Order> {
     const response = await apiClient.post<{ order: Order }>(`/api/orders`, data);
-    return response.data.order;
+    return response.order;
   },
 
   async updateOrder(id: number, data: OrderFormData): Promise<Order> {
     const response = await apiClient.put<{ order: Order }>(`/api/orders/${id}`, data);
-    return response.data.order;
+    return response.order;
   },
 
   async deleteOrder(id: number): Promise<void> {
@@ -128,6 +136,6 @@ export const orderService = {
 
   async assignCourier(orderId: number, courierId: number): Promise<Order> {
     const response = await apiClient.patch<{ order: Order }>(`/api/orders/${orderId}/assign-courier`, { courierId });
-    return response.data.order;
+    return response.order;
   },
 };

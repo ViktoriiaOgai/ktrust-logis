@@ -48,12 +48,12 @@ export default function AboutPage() {
 
 
 <Calculator
-  title="Получите консультацию"
-  description="Оставьте заявку, наш менеджер свяжется с вами и уточнит детали"
-  buttonText="Оставить заявку"
-  className="order-btn"
- onButtonClick={() => "/create-order"}
-/>
+        title="Получите консультацию"
+        description="Оставьте заявку, наш менеджер свяжется с вами и уточнит детали"
+        buttonText="Оставить заявку"
+        className="order-btn"
+      />
+     
      </div>
     <Footer />
     </>

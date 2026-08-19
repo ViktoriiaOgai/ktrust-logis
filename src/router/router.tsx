@@ -5,6 +5,7 @@ import HomePage from "@/pages/client/HomePage";
 import TrackingPage from "@/pages/client/TrackingPage";
 import LoginPage from "@/pages/auth/LoginPage";
 import RegisterPage from "@/pages/auth/RegisterPage";
+import AdminHomePage from "@/pages/admin/AdminHomePage";
 import DashboardPage from "@/pages/admin/DashboardPage";
 import OrdersPage from "@/pages/admin/OrdersPage";
 import OrderDetailsPage from "@/pages/admin/OrderDetailsPage";
@@ -21,6 +22,10 @@ import RootLayout from "@/components/layouts/RootLayout";
 import AboutPage from "@/pages/client/Abouts/AboutPage";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import RoleBasedRoute from "@/components/auth/RoleBasedRoute";
+import AccessDeniedPage from "@/pages/error/AccessDeniedPage";
+import NotFoundPage from "@/pages/error/NotFoundPage";
+import OperatorDashboard from "@/pages/operator/OperatorDashboard";
+import CourierDashboard from "@/pages/courier/CourierDashboard";
 
 export const router = createBrowserRouter([
   {
@@ -46,8 +51,48 @@ export const router = createBrowserRouter([
         path: "/dashboard",
         element: (
           <ProtectedRoute>
-            <RoleBasedRoute allowedRoles={['Admin', 'Operator']}>
+            <RoleBasedRoute allowedRoles={['Admin']}>
               <DashboardPage />
+            </RoleBasedRoute>
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/operator",
+        element: (
+          <ProtectedRoute>
+            <RoleBasedRoute allowedRoles={['Operator']}>
+              <OperatorDashboard />
+            </RoleBasedRoute>
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/admin",
+        element: (
+          <ProtectedRoute>
+            <RoleBasedRoute allowedRoles={['Admin']}>
+              <AdminHomePage />
+            </RoleBasedRoute>
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/admin/dashboard",
+        element: (
+          <ProtectedRoute>
+            <RoleBasedRoute allowedRoles={['Admin']}>
+              <DashboardPage />
+            </RoleBasedRoute>
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/courier",
+        element: (
+          <ProtectedRoute>
+            <RoleBasedRoute allowedRoles={['Courier']}>
+              <CourierDashboard />
             </RoleBasedRoute>
           </ProtectedRoute>
         ),
@@ -68,6 +113,56 @@ export const router = createBrowserRouter([
           <ProtectedRoute>
             <RoleBasedRoute allowedRoles={['Admin', 'Operator', 'Courier']}>
               <OrderDetailsPage />
+            </RoleBasedRoute>
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/admin/orders",
+        element: (
+          <ProtectedRoute>
+            <RoleBasedRoute allowedRoles={['Admin']}>
+              <OrdersPage />
+            </RoleBasedRoute>
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/admin/orders/:id",
+        element: (
+          <ProtectedRoute>
+            <RoleBasedRoute allowedRoles={['Admin']}>
+              <OrderDetailsPage />
+            </RoleBasedRoute>
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/admin/users",
+        element: (
+          <ProtectedRoute>
+            <RoleBasedRoute allowedRoles={['Admin']}>
+              <UsersPage />
+            </RoleBasedRoute>
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/admin/customers",
+        element: (
+          <ProtectedRoute>
+            <RoleBasedRoute allowedRoles={['Admin']}>
+              <CustomersPage />
+            </RoleBasedRoute>
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/admin/create-order",
+        element: (
+          <ProtectedRoute>
+            <RoleBasedRoute allowedRoles={['Admin']}>
+              <CreateOrderPage />
             </RoleBasedRoute>
           </ProtectedRoute>
         ),
@@ -129,6 +224,14 @@ export const router = createBrowserRouter([
       {
         path: "/abouts/about",
         element: <AboutPage />,
+      },
+      {
+        path: "/access-denied",
+        element: <AccessDeniedPage />,
+      },
+      {
+        path: "*",
+        element: <NotFoundPage />,
       },
     ],
   },

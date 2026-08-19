@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import "@/components/ui/Modal.css";
-import { useNavigate } from "react-router-dom";
 import OrderButton from "@/components/ui/OrderButton";
+import { operatorService } from "@/services/operatorService";
 
 
 // Иконки
@@ -39,7 +39,6 @@ export default function Modal({
   buttonText = "Отправить заявку",
   onClose,
 }: ModalProps) {
-  const navigate = useNavigate();
   const [contactMethod, setContactMethod] =
     useState<ContactMethod>("phone");
 
@@ -55,6 +54,9 @@ export default function Modal({
     contact: "",
     currentCountryCode: "+7",
   });
+
+  const [operatorPhone, setOperatorPhone] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   // Закрытие селектора стран при клике снаружи
   useEffect(() => {
@@ -73,6 +75,24 @@ export default function Modal({
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  // Загрузка телефона оператора при открытии модального окна
+  useEffect(() => {
+    async function fetchOperatorPhone() {
+      try {
+        const response = await operatorService.getActiveOperator();
+        if (response.operator && response.operator.phone) {
+          setOperatorPhone(response.operator.phone);
+        }
+      } catch (error) {
+        console.error('Failed to fetch operator phone:', error);
+      }
+    }
+
+    if (isOpen) {
+      fetchOperatorPhone();
+    }
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -130,7 +150,7 @@ export default function Modal({
       >
         ✕
       </button>
-    )}
+      )}
 
       <div className="modal">
         <h3>{title}</h3>
@@ -335,14 +355,67 @@ export default function Modal({
         </div>
 
         {/* КНОПКА */}
-    <div className="modal-actions">
-  <OrderButton
-  className="order-btn"
-  onClick={() => navigate("/create-order")}
->
-  {buttonText}
-</OrderButton>
-</div>
+        <div className="modal-actions">
+          <OrderButton
+            className="order-btn"
+            onClick={async () => {
+              if (loading) return;
+
+              // Валидация
+              if (!formData.name || !formData.address || !formData.cargoName || !formData.contact) {
+                alert('Пожалуйста, заполните все поля');
+                return;
+              }
+
+              setLoading(true);
+
+              try {
+                const message = `
+Новая заявка на доставку:
+Имя: ${formData.name}
+Адрес: ${formData.address}
+Груз: ${formData.cargoName}
+Контакт: ${formData.contact}
+Способ связи: ${contactMethod}
+                `.trim();
+
+                // Если есть телефон оператора, формируем ссылку для связи
+                if (operatorPhone) {
+                  let contactUrl = '';
+
+                  if (contactMethod === 'phone') {
+                    contactUrl = `tel:${operatorPhone}`;
+                  } else if (contactMethod === 'whatsapp') {
+                    contactUrl = `https://wa.me/${operatorPhone.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`;
+                  } else if (contactMethod === 'telegram') {
+                    contactUrl = `https://t.me/${operatorPhone.replace(/\D/g, '')}`;
+                  }
+
+                  if (contactUrl) {
+                    window.open(contactUrl, '_blank');
+                  }
+                } else {
+                  // Если нет оператора, показываем сообщение
+                  alert('Извините, сейчас нет доступных операторов. Попробуйте позже.');
+                  return;
+                }
+
+                // В реальном проекте здесь был бы API вызов для сохранения заявки:
+                // await fetch('/api/requests', { method: 'POST', body: JSON.stringify({ ...formData, contactMethod }) });
+
+                alert('Заявка отправлена! Менеджер свяжется с вами в ближайшее время.');
+                onClose?.();
+              } catch (error) {
+                alert('Ошибка при отправке заявки. Попробуйте позже.');
+              } finally {
+                setLoading(false);
+              }
+            }}
+            disabled={loading}
+          >
+            {loading ? 'Отправка...' : buttonText}
+          </OrderButton>
+        </div>
       </div>
     </div>
   );

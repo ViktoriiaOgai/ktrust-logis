@@ -5,7 +5,7 @@ const seedAdmin = async () => {
   try {
     console.log('Seeding admin user...');
     
-    const hashedPassword = await bcrypt.hash('admin123', 10);
+    const hashedPassword = await bcrypt.hash('admin1234567', 10);
     
     const result = await pool.query(
       `INSERT INTO users (full_name, email, password_hash, role, is_active)
@@ -18,7 +18,7 @@ const seedAdmin = async () => {
     
     console.log('✓ Admin user created/updated:', result.rows[0]);
     console.log('Email: admin@ktrust-logis.com');
-    console.log('Password: admin123');
+    console.log('Password: admin1234567');
     
     await pool.end();
     process.exit(0);

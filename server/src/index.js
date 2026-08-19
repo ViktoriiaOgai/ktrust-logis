@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import { config } from './config/index.js';
 import { errorHandler, notFound } from './middleware/index.js';
-import { authRoutes, userRoutes, customerRoutes, orderRoutes, statusRoutes, dashboardRoutes } from './routes/index.js';
+import { authRoutes, userRoutes, customerRoutes, orderRoutes, statusRoutes, dashboardRoutes, operatorRoutes } from './routes/index.js';
 
 const app = express();
 
@@ -30,6 +30,7 @@ app.use('/api/customers', customerRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/status', statusRoutes);
 app.use('/api/dashboard', dashboardRoutes);
+app.use('/api/operators', operatorRoutes);
 
 // Error handling
 app.use(notFound);

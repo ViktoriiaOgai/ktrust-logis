@@ -4,5 +4,6 @@ import customerRoutes from './customerRoutes.js';
 import orderRoutes from './orderRoutes.js';
 import statusRoutes from './statusRoutes.js';
 import dashboardRoutes from './dashboardRoutes.js';
+import operatorRoutes from './operatorRoutes.js';
 
-export { authRoutes, userRoutes, customerRoutes, orderRoutes, statusRoutes, dashboardRoutes };
+export { authRoutes, userRoutes, customerRoutes, orderRoutes, statusRoutes, dashboardRoutes, operatorRoutes };

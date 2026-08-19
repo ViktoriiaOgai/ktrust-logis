@@ -1,52 +1,79 @@
-import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { apiClient } from '@/services/api';
-import './LoginPage.css';
-
-// Описываем интерфейс ответа от сервера
-interface RegisterResponse {
-  user: {
-    id: string;
-    email: string;
-    fullName: string;
-    role?: string;
-  };
-  token: string;
-}
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "@/context/AuthContext";
+import "./LoginPage.css";
 
 export default function RegisterPage() {
-  const [fullName, setFullName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  const { login } = useAuth();
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
+
+    setError("");
     setLoading(true);
 
     try {
-      // Приводим response.data к описанному типу с помощью "as"
-      const response = await apiClient.post('/api/auth/register', {
-        fullName,
-        email,
-        password,
-      });
+      const response = await fetch(
+        "http://localhost:3001/api/auth/register",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            fullName,
+            email,
+            password,
+          }),
+        },
+      );
 
-      const { user, token } = response.data as RegisterResponse;
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(
+          data.message || "Registration failed",
+        );
+      }
+
+      // После регистрации автоматически авторизуем пользователя
+      await login(email, password);
+
+      // Редирект в зависимости от роли
+      const userRole = data.data.user?.role;
+      let redirectUrl = '/';
       
-      localStorage.setItem('token', token);
-      localStorage.setItem('user', JSON.stringify(user));
-      apiClient.setToken(token);
-      
-      navigate('/dashboard');
-    } catch (err: any) {
-      // Обработка ошибки с поддержкой Axios / custom error
+      switch (userRole) {
+        case 'User':
+          redirectUrl = '/';
+          break;
+        case 'Operator':
+          redirectUrl = '/operator';
+          break;
+        case 'Admin':
+          redirectUrl = '/admin';
+          break;
+        case 'Courier':
+          redirectUrl = '/courier';
+          break;
+        default:
+          redirectUrl = '/';
+      }
+
+      navigate(redirectUrl);
+    } catch (err: unknown) {
       const message =
-        err?.response?.data?.message ||
-        (err instanceof Error ? err.message : 'Registration failed');
+        err instanceof Error
+          ? err.message
+          : "Registration failed";
+
       setError(message);
     } finally {
       setLoading(false);
@@ -58,48 +85,70 @@ export default function RegisterPage() {
       <div className="login-page__container">
         <div className="login-page__header">
           <h1>KTrust Logistics</h1>
-          <p>CRM System</p>
+          <p>CRM Система</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="login-page__form">
-          <h2>Register</h2>
+        <form
+          onSubmit={handleSubmit}
+          className="login-page__form"
+        >
+          <h2>Регистрация</h2>
 
-          {error && <div className="login-page__error">{error}</div>}
+          {error && (
+            <div className="login-page__error">
+              {error}
+            </div>
+          )}
 
           <div className="login-page__form-group">
-            <label htmlFor="fullName">Full Name</label>
+            <label htmlFor="fullName">
+              Полное имя
+            </label>
+
             <input
               type="text"
               id="fullName"
               value={fullName}
-              onChange={(e) => setFullName(e.target.value)}
+              onChange={(e) =>
+                setFullName(e.target.value)
+              }
               required
-              placeholder="Enter your full name"
+              placeholder="Введите ваше полное имя"
             />
           </div>
 
           <div className="login-page__form-group">
-            <label htmlFor="email">Email</label>
+            <label htmlFor="email">
+              Email
+            </label>
+
             <input
               type="email"
               id="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) =>
+                setEmail(e.target.value)
+              }
               required
-              placeholder="Enter your email"
+              placeholder="Введите ваш email"
             />
           </div>
 
           <div className="login-page__form-group">
-            <label htmlFor="password">Password</label>
+            <label htmlFor="password">
+              Пароль
+            </label>
+
             <input
               type="password"
               id="password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) =>
+                setPassword(e.target.value)
+              }
               required
-              placeholder="Enter your password (min 8 characters)"
               minLength={8}
+              placeholder="Введите пароль (минимум 8 символов)"
             />
           </div>
 
@@ -108,13 +157,17 @@ export default function RegisterPage() {
             className="login-page__submit-btn"
             disabled={loading}
           >
-            {loading ? 'Registering...' : 'Register'}
+            {loading
+              ? "Регистрация..."
+              : "Зарегистрироваться"}
           </button>
         </form>
 
         <div className="login-page__footer">
-          {/* Используем Link из react-router-dom вместо обычного <a> */}
-          <p>Already have an account? <Link to="/login">Login</Link></p>
+          <p>
+            Уже есть аккаунт?{" "}
+            <Link to="/login">Войти</Link>
+          </p>
         </div>
       </div>
     </div>

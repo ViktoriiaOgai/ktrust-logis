@@ -2,120 +2,84 @@ import pool from '../config/database.js';
 
 export const dashboardService = {
   async getDashboardStats(dateFrom = null, dateTo = null) {
-    const conditions = [];
+    let dateFilter = '';
     const params = [];
     let paramIndex = 1;
 
-    if (dateFrom) {
-      conditions.push(`created_at >= $${paramIndex}`);
-      params.push(dateFrom);
-      paramIndex++;
+    if (dateFrom && dateTo) {
+      dateFilter = `WHERE o.created_at >= $${paramIndex} AND o.created_at <= $${paramIndex + 1}`;
+      params.push(dateFrom, dateTo);
+      paramIndex += 2;
     }
 
-    if (dateTo) {
-      conditions.push(`created_at <= $${paramIndex}`);
-      params.push(dateTo);
-      paramIndex++;
-    }
-
-    const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
-
-    // Get total orders count
-    const totalOrdersQuery = `
-      SELECT COUNT(*) as count
-      FROM parcel_orders
-      ${whereClause}
+    // Overview stats
+    const overviewQuery = `
+      SELECT
+        COUNT(DISTINCT o.id) as total_orders,
+        COUNT(DISTINCT c.id) as total_customers,
+        COUNT(DISTINCT u.id) as total_users,
+        COALESCE(SUM(o.delivery_price), 0) as total_revenue
+      FROM parcel_orders o
+      LEFT JOIN customers c ON o.customer_id = c.id
+      LEFT JOIN users u ON u.role IN ('Admin', 'Operator', 'Courier')
+      ${dateFilter}
     `;
-    const totalOrdersResult = await pool.query(totalOrdersQuery, params);
-    const totalOrders = parseInt(totalOrdersResult.rows[0].count);
 
-    // Get orders by status
-    const ordersByStatusQuery = `
+    const overviewResult = await pool.query(overviewQuery, params);
+    const overview = overviewResult.rows[0];
+
+    // Orders by status
+    const statusQuery = `
       SELECT current_status, COUNT(*) as count
-      FROM parcel_orders
-      ${whereClause}
+      FROM parcel_orders o
+      ${dateFilter}
       GROUP BY current_status
       ORDER BY count DESC
     `;
-    const ordersByStatusResult = await pool.query(ordersByStatusQuery, params);
-    const ordersByStatus = ordersByStatusResult.rows;
 
-    // Get total customers
-    const totalCustomersQuery = `
-      SELECT COUNT(*) as count
-      FROM customers
-      ${whereClause}
+    const statusResult = await pool.query(statusQuery, params);
+    const ordersByStatus = statusResult.rows;
+
+    // Delivery stats
+    const deliveryQuery = `
+      SELECT
+        COUNT(*) as total_deliveries,
+        COUNT(*) FILTER (WHERE current_status = 'Delivered') as successful_deliveries,
+        COUNT(*) FILTER (WHERE current_status = 'Delivery Failed') as failed_deliveries,
+        COUNT(*) FILTER (WHERE current_status = 'Delayed') as delayed_deliveries
+      FROM parcel_orders o
+      ${dateFilter}
     `;
-    const totalCustomersResult = await pool.query(totalCustomersQuery, params);
-    const totalCustomers = parseInt(totalCustomersResult.rows[0].count);
 
-    // Get total users
-    const totalUsersQuery = `
-      SELECT COUNT(*) as count
-      FROM users
-      ${whereClause}
-    `;
-    const totalUsersResult = await pool.query(totalUsersQuery, params);
-    const totalUsers = parseInt(totalUsersResult.rows[0].count);
+    const deliveryResult = await pool.query(deliveryQuery, params);
+    const deliveryStats = deliveryResult.rows[0];
 
-    // Get recent orders (last 10)
-    const recentOrdersQuery = `
-      SELECT 
-        po.id,
-        po.tracking_number,
-        po.current_status,
-        po.created_at,
+    // Recent orders
+    const recentQuery = `
+      SELECT
+        o.id,
+        o.tracking_number,
+        o.current_status,
+        o.created_at,
         c.name as customer_name,
-        po.origin_city,
-        po.destination_city
-      FROM parcel_orders po
-      LEFT JOIN customers c ON po.customer_id = c.id
-      ${whereClause}
-      ORDER BY po.created_at DESC
+        o.origin_city,
+        o.destination_city
+      FROM parcel_orders o
+      LEFT JOIN customers c ON o.customer_id = c.id
+      ${dateFilter}
+      ORDER BY o.created_at DESC
       LIMIT 10
     `;
-    const recentOrdersResult = await pool.query(recentOrdersQuery, params);
-    const recentOrders = recentOrdersResult.rows;
 
-    // Get delivery statistics
-    const deliveryStatsQuery = `
-      SELECT 
-        COUNT(*) as total_deliveries,
-        COUNT(CASE WHEN current_status = 'Delivered' THEN 1 END) as successful_deliveries,
-        COUNT(CASE WHEN current_status = 'Delivery Failed' THEN 1 END) as failed_deliveries,
-        COUNT(CASE WHEN current_status = 'Delayed' THEN 1 END) as delayed_deliveries
-      FROM parcel_orders
-      ${whereClause}
-    `;
-    const deliveryStatsResult = await pool.query(deliveryStatsQuery, params);
-    const deliveryStats = deliveryStatsResult.rows[0];
-
-    // Get revenue (sum of delivery prices for delivered orders)
-    const revenueQuery = `
-      SELECT COALESCE(SUM(delivery_price), 0) as total_revenue
-      FROM parcel_orders
-      WHERE current_status = 'Delivered'
-      ${dateFrom ? `AND created_at >= $${paramIndex++}` : ''}
-      ${dateTo ? `AND created_at <= $${paramIndex++}` : ''}
-    `;
-    const revenueParams = [];
-    let revenueParamIndex = 1;
-    if (dateFrom) {
-      revenueParams.push(dateFrom);
-      revenueParamIndex++;
-    }
-    if (dateTo) {
-      revenueParams.push(dateTo);
-    }
-    const revenueResult = await pool.query(revenueQuery, revenueParams);
-    const totalRevenue = parseFloat(revenueResult.rows[0].total_revenue);
+    const recentResult = await pool.query(recentQuery, params);
+    const recentOrders = recentResult.rows;
 
     return {
       overview: {
-        totalOrders,
-        totalCustomers,
-        totalUsers,
-        totalRevenue,
+        totalOrders: parseInt(overview.total_orders) || 0,
+        totalCustomers: parseInt(overview.total_customers) || 0,
+        totalUsers: parseInt(overview.total_users) || 0,
+        totalRevenue: parseFloat(overview.total_revenue) || 0,
       },
       ordersByStatus,
       deliveryStats: {
@@ -130,34 +94,34 @@ export const dashboardService = {
 
   async getOrderTrends(days = 30) {
     const query = `
-      SELECT 
+      SELECT
         DATE(created_at) as date,
         COUNT(*) as orders_count
       FROM parcel_orders
-      WHERE created_at >= CURRENT_DATE - INTERVAL '1 day' * $1
+      WHERE created_at >= CURRENT_DATE - INTERVAL '${days} days'
       GROUP BY DATE(created_at)
       ORDER BY date ASC
     `;
-    
-    const result = await pool.query(query, [days]);
+
+    const result = await pool.query(query);
     return result.rows;
   },
 
   async getTopCouriers(limit = 5) {
     const query = `
-      SELECT 
+      SELECT
         u.id,
         u.full_name,
-        COUNT(po.id) as total_deliveries,
-        COUNT(CASE WHEN po.current_status = 'Delivered' THEN 1 END) as successful_deliveries
+        COUNT(o.id) as total_deliveries,
+        COUNT(o.id) FILTER (WHERE o.current_status = 'Delivered') as successful_deliveries
       FROM users u
-      LEFT JOIN parcel_orders po ON u.id = po.assigned_courier_id
+      LEFT JOIN orders o ON u.id = o.courier_id
       WHERE u.role = 'Courier'
       GROUP BY u.id, u.full_name
-      ORDER BY successful_deliveries DESC NULLS LAST
+      ORDER BY successful_deliveries DESC
       LIMIT $1
     `;
-    
+
     const result = await pool.query(query, [limit]);
     return result.rows;
   },
