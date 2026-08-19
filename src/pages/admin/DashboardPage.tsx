@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { dashboardService } from '@/services/dashboardService';
 import type { DashboardStats, OrderTrend, TopCourier } from '@/services/dashboardService';
+import LoadingSpinner from '@/components/ui/LoadingSpinner';
+import EmptyState from '@/components/ui/EmptyState';
 import './DashboardPage.css';
 
 export default function DashboardPage() {
@@ -26,7 +28,7 @@ export default function DashboardPage() {
       setTrends(trendsData);
       setTopCouriers(couriersData);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to fetch dashboard data');
+      setError(err instanceof Error ? err.message : 'Не удалось загрузить данные дашборда');
     } finally {
       setLoading(false);
     }
@@ -46,15 +48,39 @@ export default function DashboardPage() {
   };
 
   if (loading) {
-    return <div className="dashboard-page">Loading...</div>;
+    return (
+      <div className="dashboard-page">
+        <LoadingSpinner message="Загрузка данных дашборда..." />
+      </div>
+    );
   }
 
   if (error) {
-    return <div className="dashboard-page dashboard-page__error">{error}</div>;
+    return (
+      <div className="dashboard-page">
+        <EmptyState
+          icon="⚠️"
+          title="Ошибка загрузки дашборда"
+          message={error}
+          action={{
+            label: 'Повторить',
+            onClick: fetchDashboardData,
+          }}
+        />
+      </div>
+    );
   }
 
   if (!stats) {
-    return <div className="dashboard-page">No data available</div>;
+    return (
+      <div className="dashboard-page">
+        <EmptyState
+          icon="📊"
+          title="Нет данных"
+          message="В данный момент нет данных для отображения."
+        />
+      </div>
+    );
   }
 
   const getStatusLabel = (status: string) => {
@@ -98,7 +124,7 @@ export default function DashboardPage() {
   return (
     <div className="dashboard-page">
       <div className="dashboard-page__header">
-        <h1>Dashboard</h1>
+        <h1>Дашборд</h1>
         <div className="dashboard-page__filters">
           <input
             type="date"
@@ -113,10 +139,10 @@ export default function DashboardPage() {
             className="dashboard-page__date-input"
           />
           <button onClick={handleDateFilter} className="dashboard-page__filter-btn">
-            Apply
+            Применить
           </button>
           <button onClick={handleResetFilters} className="dashboard-page__filter-btn dashboard-page__filter-btn--reset">
-            Reset
+            Сбросить
           </button>
         </div>
       </div>
@@ -124,22 +150,22 @@ export default function DashboardPage() {
       {/* Overview Cards */}
       <div className="dashboard-page__stats-grid">
         <div className="dashboard-page__stat-card">
-          <div className="dashboard-page__stat-card__title">Total Orders</div>
+          <div className="dashboard-page__stat-card__title">Всего заказов</div>
           <div className="dashboard-page__stat-card__value">{stats.overview.totalOrders}</div>
           <div className="dashboard-page__stat-card__icon">📦</div>
         </div>
         <div className="dashboard-page__stat-card">
-          <div className="dashboard-page__stat-card__title">Total Customers</div>
+          <div className="dashboard-page__stat-card__title">Всего клиентов</div>
           <div className="dashboard-page__stat-card__value">{stats.overview.totalCustomers}</div>
           <div className="dashboard-page__stat-card__icon">👥</div>
         </div>
         <div className="dashboard-page__stat-card">
-          <div className="dashboard-page__stat-card__title">Total Users</div>
+          <div className="dashboard-page__stat-card__title">Всего пользователей</div>
           <div className="dashboard-page__stat-card__value">{stats.overview.totalUsers}</div>
           <div className="dashboard-page__stat-card__icon">👤</div>
         </div>
         <div className="dashboard-page__stat-card">
-          <div className="dashboard-page__stat-card__title">Total Revenue</div>
+          <div className="dashboard-page__stat-card__title">Общая выручка</div>
           <div className="dashboard-page__stat-card__value">${stats.overview.totalRevenue.toFixed(2)}</div>
           <div className="dashboard-page__stat-card__icon">💰</div>
         </div>
@@ -148,9 +174,9 @@ export default function DashboardPage() {
       <div className="dashboard-page__charts-grid">
         {/* Orders by Status */}
         <div className="dashboard-page__chart-card">
-          <h2>Orders by Status</h2>
+          <h2>Заказы по статусам</h2>
           <div className="dashboard-page__status-bars">
-            {stats.ordersByStatus.map((item) => (
+            {stats.ordersByStatus.map((item: { current_status: string; count: number }) => (
               <div key={item.current_status} className="dashboard-page__status-bar">
                 <div className="dashboard-page__status-bar__label">
                   {getStatusLabel(item.current_status)}
@@ -172,27 +198,27 @@ export default function DashboardPage() {
 
         {/* Delivery Statistics */}
         <div className="dashboard-page__chart-card">
-          <h2>Delivery Statistics</h2>
+          <h2>Статистика доставок</h2>
           <div className="dashboard-page__delivery-stats">
             <div className="dashboard-page__delivery-stat">
-              <div className="dashboard-page__delivery-stat__label">Total Deliveries</div>
+              <div className="dashboard-page__delivery-stat__label">Всего доставок</div>
               <div className="dashboard-page__delivery-stat__value">{stats.deliveryStats.totalDeliveries}</div>
             </div>
             <div className="dashboard-page__delivery-stat dashboard-page__delivery-stat--success">
-              <div className="dashboard-page__delivery-stat__label">Successful</div>
+              <div className="dashboard-page__delivery-stat__label">Успешных</div>
               <div className="dashboard-page__delivery-stat__value">{stats.deliveryStats.successfulDeliveries}</div>
             </div>
             <div className="dashboard-page__delivery-stat dashboard-page__delivery-stat--failed">
-              <div className="dashboard-page__delivery-stat__label">Failed</div>
+              <div className="dashboard-page__delivery-stat__label">Неудачных</div>
               <div className="dashboard-page__delivery-stat__value">{stats.deliveryStats.failedDeliveries}</div>
             </div>
             <div className="dashboard-page__delivery-stat dashboard-page__delivery-stat--delayed">
-              <div className="dashboard-page__delivery-stat__label">Delayed</div>
+              <div className="dashboard-page__delivery-stat__label">Задержанных</div>
               <div className="dashboard-page__delivery-stat__value">{stats.deliveryStats.delayedDeliveries}</div>
             </div>
           </div>
           <div className="dashboard-page__success-rate">
-            <div className="dashboard-page__success-rate__label">Success Rate</div>
+            <div className="dashboard-page__success-rate__label">Успешность</div>
             <div className="dashboard-page__success-rate__value">{successRate}%</div>
           </div>
         </div>
@@ -200,7 +226,7 @@ export default function DashboardPage() {
 
       {/* Order Trends */}
       <div className="dashboard-page__chart-card dashboard-page__chart-card--full">
-        <h2>Order Trends (Last 30 Days)</h2>
+        <h2>Тренды заказов (последние 30 дней)</h2>
         <div className="dashboard-page__trends-chart">
           {trends.map((trend) => (
             <div key={trend.date} className="dashboard-page__trend-bar">
@@ -222,7 +248,7 @@ export default function DashboardPage() {
       <div className="dashboard-page__charts-grid">
         {/* Top Couriers */}
         <div className="dashboard-page__chart-card">
-          <h2>Top Couriers</h2>
+          <h2>Лучшие курьеры</h2>
           <div className="dashboard-page__couriers-list">
             {topCouriers.map((courier, index) => (
               <div key={courier.id} className="dashboard-page__courier-item">
@@ -230,24 +256,24 @@ export default function DashboardPage() {
                 <div className="dashboard-page__courier-item__info">
                   <div className="dashboard-page__courier-item__name">{courier.full_name}</div>
                   <div className="dashboard-page__courier-item__stats">
-                    <span>{courier.successful_deliveries} successful</span>
+                    <span>{courier.successful_deliveries} успешных</span>
                     <span>•</span>
-                    <span>{courier.total_deliveries} total</span>
+                    <span>{courier.total_deliveries} всего</span>
                   </div>
                 </div>
               </div>
             ))}
             {topCouriers.length === 0 && (
-              <div className="dashboard-page__empty">No courier data available</div>
+              <div className="dashboard-page__empty">Нет данных о курьерах</div>
             )}
           </div>
         </div>
 
         {/* Recent Orders */}
         <div className="dashboard-page__chart-card">
-          <h2>Recent Orders</h2>
+          <h2>Последние заказы</h2>
           <div className="dashboard-page__recent-orders">
-            {stats.recentOrders.map((order) => (
+            {stats.recentOrders.map((order: { id: number; tracking_number: string; customer_name: string; origin_city: string; destination_city: string; current_status: string }) => (
               <div key={order.id} className="dashboard-page__recent-order">
                 <div className="dashboard-page__recent-order__tracking">{order.tracking_number}</div>
                 <div className="dashboard-page__recent-order__info">
@@ -267,7 +293,7 @@ export default function DashboardPage() {
               </div>
             ))}
             {stats.recentOrders.length === 0 && (
-              <div className="dashboard-page__empty">No recent orders</div>
+              <div className="dashboard-page__empty">Нет последних заказов</div>
             )}
           </div>
         </div>

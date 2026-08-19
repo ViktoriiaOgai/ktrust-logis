@@ -56,23 +56,22 @@ export const customerService = {
     const queryString = params.toString();
     const endpoint = `/api/customers${queryString ? `?${queryString}` : ''}`;
 
-    const response = await apiClient.get<CustomersResponse>(endpoint);
-    return response.data;
+    return await apiClient.get<CustomersResponse>(endpoint);
   },
 
   async getCustomerById(id: number): Promise<Customer> {
     const response = await apiClient.get<{ customer: Customer }>(`/api/customers/${id}`);
-    return response.data.customer;
+    return response.customer;
   },
 
   async createCustomer(data: CustomerFormData): Promise<Customer> {
     const response = await apiClient.post<{ customer: Customer }>(`/api/customers`, data);
-    return response.data.customer;
+    return response.customer;
   },
 
   async updateCustomer(id: number, data: CustomerFormData): Promise<Customer> {
     const response = await apiClient.put<{ customer: Customer }>(`/api/customers/${id}`, data);
-    return response.data.customer;
+    return response.customer;
   },
 
   async deleteCustomer(id: number): Promise<void> {

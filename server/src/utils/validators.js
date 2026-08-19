@@ -20,6 +20,16 @@ export const registerValidator = [
     .withMessage('Password is required')
     .isLength({ min: 8 })
     .withMessage('Password must be at least 8 characters'),
+  body('role')
+    .optional()
+    .trim()
+    .isIn(['Admin', 'Operator', 'Courier', 'User'])
+    .withMessage('Invalid role'),
+  body('phone')
+    .optional()
+    .trim()
+    .isLength({ min: 10, max: 20 })
+    .withMessage('Phone must be between 10 and 20 characters'),
 ];
 
 export const loginValidator = [

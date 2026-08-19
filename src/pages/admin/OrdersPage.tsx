@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
-import { orderService } from '@/services/orderService';
+import { orderService } from '../../services/orderService';
 import { customerService } from '@/services/customerService';
 import { userService } from '@/services/userService';
-import type { Order, OrderFilters, OrderFormData } from '@/services/orderService';
+import type { Order, OrderFilters, OrderFormData } from '../../services/orderService';
 import type { Customer} from '@/services/customerService';
 import type { User } from '@/services/userService';
+import LoadingSpinner from '@/components/ui/LoadingSpinner';
+import EmptyState from '@/components/ui/EmptyState';
 import './OrdersPage.css';
 
 export default function OrdersPage() {
@@ -277,7 +279,17 @@ export default function OrdersPage() {
       {error && <div className="orders-page__error">{error}</div>}
 
       {loading ? (
-        <div className="orders-page__loading">Loading...</div>
+        <LoadingSpinner message="Loading orders..." />
+      ) : orders.length === 0 ? (
+        <EmptyState
+          icon="📦"
+          title="No orders found"
+          message="No orders match your current filters. Try adjusting your search criteria."
+          action={{
+            label: 'Create Order',
+            onClick: () => setShowModal(true),
+          }}
+        />
       ) : (
         <>
           <div className="orders-page__table-wrapper">
@@ -358,10 +370,6 @@ export default function OrdersPage() {
               </tbody>
             </table>
           </div>
-
-          {orders.length === 0 && !loading && (
-            <div className="orders-page__empty">No orders found</div>
-          )}
 
           {pagination.totalPages > 1 && (
             <div className="orders-page__pagination">

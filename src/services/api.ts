@@ -1,10 +1,6 @@
-const API_BASE_URL = (import.meta.env.VITE_API_URL as string) || 'http://localhost:3000';
+const API_BASE_URL = (import.meta.env.VITE_API_URL as string) || 'http://localhost:3001';
 
-interface ApiResponse<T> {
-  success: boolean;
-  message: string;
-  data: T;
-}
+
 
 class ApiClient {
   private baseURL: string;
@@ -28,7 +24,7 @@ class ApiClient {
   private async request<T>(
     endpoint: string,
     options: RequestInit = {}
-  ): Promise<ApiResponse<T>> {
+  ): Promise<T> {
     const url = `${this.baseURL}${endpoint}`;
     
     const headers: Record<string, string> = {
@@ -51,35 +47,36 @@ class ApiClient {
       throw new Error(data.message || 'An error occurred');
     }
 
-    return data;
+    // Return the data field from the response
+    return data.data as T;
   }
 
-  async get<T>(endpoint: string): Promise<ApiResponse<T>> {
+  async get<T>(endpoint: string): Promise<T> {
     return this.request<T>(endpoint, { method: 'GET' });
   }
 
-  async post<T>(endpoint: string, body: unknown): Promise<ApiResponse<T>> {
+  async post<T>(endpoint: string, body: unknown): Promise<T> {
     return this.request<T>(endpoint, {
       method: 'POST',
       body: JSON.stringify(body),
     });
   }
 
-  async patch<T>(endpoint: string, body: unknown): Promise<ApiResponse<T>> {
+  async patch<T>(endpoint: string, body: unknown): Promise<T> {
     return this.request<T>(endpoint, {
       method: 'PATCH',
       body: JSON.stringify(body),
     });
   }
 
-  async put<T>(endpoint: string, body: unknown): Promise<ApiResponse<T>> {
+  async put<T>(endpoint: string, body: unknown): Promise<T> {
     return this.request<T>(endpoint, {
       method: 'PUT',
       body: JSON.stringify(body),
     });
   }
 
-  async delete<T>(endpoint: string): Promise<ApiResponse<T>> {
+  async delete<T>(endpoint: string): Promise<T> {
     return this.request<T>(endpoint, { method: 'DELETE' });
   }
 }

@@ -7,16 +7,19 @@ export interface DashboardStats {
     totalUsers: number;
     totalRevenue: number;
   };
+
   ordersByStatus: Array<{
     current_status: string;
     count: number;
   }>;
+
   deliveryStats: {
     totalDeliveries: number;
     successfulDeliveries: number;
     failedDeliveries: number;
     delayedDeliveries: number;
   };
+
   recentOrders: Array<{
     id: number;
     tracking_number: string;
@@ -41,28 +44,47 @@ export interface TopCourier {
 }
 
 export const dashboardService = {
-  async getDashboardStats(dateFrom?: string, dateTo?: string): Promise<DashboardStats> {
+  async getDashboardStats(
+    dateFrom?: string,
+    dateTo?: string
+  ): Promise<DashboardStats> {
     const params = new URLSearchParams();
-    
-    if (dateFrom) params.append('dateFrom', dateFrom);
-    if (dateTo) params.append('dateTo', dateTo);
+
+    if (dateFrom) {
+      params.append('dateFrom', dateFrom);
+    }
+
+    if (dateTo) {
+      params.append('dateTo', dateTo);
+    }
 
     const queryString = params.toString();
-    const endpoint = `/api/dashboard/stats${queryString ? `?${queryString}` : ''}`;
+
+    const endpoint = `/api/dashboard/stats${
+      queryString ? `?${queryString}` : ''
+    }`;
 
     const response = await apiClient.get<DashboardStats>(endpoint);
-    return response.data;
+    return response;
   },
 
   async getOrderTrends(days = 30): Promise<OrderTrend[]> {
     const endpoint = `/api/dashboard/trends?days=${days}`;
-    const response = await apiClient.get<{ trends: OrderTrend[] }>(endpoint);
-    return response.data.trends;
+
+    const response = await apiClient.get<{
+      trends: OrderTrend[];
+    }>(endpoint);
+
+    return response.trends;
   },
 
   async getTopCouriers(limit = 5): Promise<TopCourier[]> {
     const endpoint = `/api/dashboard/top-couriers?limit=${limit}`;
-    const response = await apiClient.get<{ couriers: TopCourier[] }>(endpoint);
-    return response.data.couriers;
+
+    const response = await apiClient.get<{
+      couriers: TopCourier[];
+    }>(endpoint);
+
+    return response.couriers;
   },
 };
