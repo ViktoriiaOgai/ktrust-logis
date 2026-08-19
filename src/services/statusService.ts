@@ -19,6 +19,6 @@ export const statusService = {
 
   async getStatusHistory(orderId: number): Promise<StatusHistory[]> {
     const response = await apiClient.get<{ history: StatusHistory[] }>(`/api/status/orders/${orderId}/history`);
-    return response.data.history;
+    return response.history;
   },
 };

@@ -604,7 +604,7 @@ export default function OrdersPage() {
                     type="date"
                     id="estimatedDeliveryDate"
                     name="estimatedDeliveryDate"
-                    value={formData.estimatedDeliveryDate}
+                    value={formData.estimatedDeliveryDate || ''}
                     onChange={handleInputChange}
                   />
                 </div>

@@ -1,6 +1,5 @@
 import { useState, useRef, useEffect } from "react";
 import "@/components/ui/Modal.css";
-import { useNavigate } from "react-router-dom";
 import OrderButton from "@/components/ui/OrderButton";
 import { operatorService } from "@/services/operatorService";
 
@@ -40,7 +39,6 @@ export default function Modal({
   buttonText = "Отправить заявку",
   onClose,
 }: ModalProps) {
-  const navigate = useNavigate();
   const [contactMethod, setContactMethod] =
     useState<ContactMethod>("phone");
 

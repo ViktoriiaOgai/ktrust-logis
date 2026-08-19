@@ -1,16 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { orderService } from '../../services/orderService';
-import { customerService } from '@/services/customerService';
+import { customerService, type Customer } from '@/services/customerService';
 import { useToast } from '@/components/ui/Toast';
 import './CreateOrderPage.css';
 
-interface Customer {
-  id: number;
-  name: string;
-  phone: string;
-  email: string;
-}
 
 export default function CreateOrderPage() {
   const navigate = useNavigate();
@@ -45,8 +39,8 @@ export default function CreateOrderPage() {
 
   const fetchCustomers = async () => {
     try {
-      const data = await customerService.getCustomers(1, 100);
-      setCustomers(data.items);
+      const data = await customerService.getCustomers({ page: 1, limit: 100 });
+setCustomers(data.customers);
     } catch (error) {
       showToast('Failed to fetch customers', 'error');
     }
@@ -138,11 +132,15 @@ export default function CreateOrderPage() {
   };
 
   const filteredCustomers = customers.filter(customer =>
-    customer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    customer.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    customer.phone.includes(searchTerm)
-  );
-
+  customer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  (customer.email && customer.email.toLowerCase().includes(searchTerm.toLowerCase())) ||
+  (customer.phone && customer.phone.includes(searchTerm))
+);
+{filteredCustomers.map(customer => (
+  <option key={customer.id} value={customer.id}>
+    {customer.name} - {customer.email || 'No email'} - {customer.phone}
+  </option>
+))}
   return (
     <div className="create-order-page">
       <div className="create-order-page__header">

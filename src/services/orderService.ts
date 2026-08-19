@@ -77,7 +77,7 @@ export interface OrderFormData {
   cargoType: string;
   declaredValue?: number;
   deliveryPrice?: number;
-  estimatedDeliveryDate?: string;
+  estimatedDeliveryDate?: string | null;
 }
 
 export const orderService = {

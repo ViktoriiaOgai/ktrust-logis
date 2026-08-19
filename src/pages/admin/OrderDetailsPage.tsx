@@ -7,6 +7,7 @@ import { useToast } from '@/components/ui/Toast';
 import StatusBadge from '@/components/ui/StatusBadge';
 import './OrderDetailsPage.css';
 
+
 interface Order {
   id: number;
   tracking_number: string;
@@ -23,9 +24,9 @@ interface Order {
   cargo_type: string;
   declared_value: number;
   delivery_price: number;
-  estimated_delivery_date: string;
+  estimated_delivery_date: string| null;
   created_at: string;
-  customer: {
+  customer?: {
     id: number;
     name: string;
     phone: string;
@@ -244,23 +245,25 @@ export default function OrderDetailsPage() {
         </div>
 
         {/* Customer Information */}
-        <div className="order-details-page__section">
-          <h2>Customer Information</h2>
-          <div className="order-details-page__info-grid">
-            <div className="order-details-page__info-item">
-              <label>Name</label>
-              <span>{order.customer.name}</span>
-            </div>
-            <div className="order-details-page__info-item">
-              <label>Phone</label>
-              <span>{order.customer.phone}</span>
-            </div>
-            <div className="order-details-page__info-item">
-              <label>Email</label>
-              <span>{order.customer.email}</span>
-            </div>
-          </div>
-        </div>
+{order.customer && (
+  <div className="order-details-page__section">
+    <h2>Customer Information</h2>
+    <div className="order-details-page__info-grid">
+      <div className="order-details-page__info-item">
+        <label>Name</label>
+        <span>{order.customer.name}</span>
+      </div>
+      <div className="order-details-page__info-item">
+        <label>Phone</label>
+        <span>{order.customer.phone}</span>
+      </div>
+      <div className="order-details-page__info-item">
+        <label>Email</label>
+        <span>{order.customer.email}</span>
+      </div>
+    </div>
+  </div>
+)}
 
         {/* Courier Information */}
         {order.courier && (
