@@ -131,4 +131,53 @@
   .login-page__form h2 {
     font-size: 1.25rem;
   }
+
+  .login-page__form-group input {
+    font-size: 0.95rem;
+  }
+
+  .login-page__submit-btn {
+    font-size: 0.95rem;
+  }
+}
+
+/* Small mobile */
+@media (max-width: 360px) {
+  .login-page__container {
+    padding: 1.25rem;
+  }
+
+  .login-page__header h1 {
+    font-size: 1.3rem;
+  }
+
+  .login-page__header p {
+    font-size: 0.85rem;
+  }
+
+  .login-page__form h2 {
+    font-size: 1.1rem;
+  }
+
+  .login-page__form-group {
+    margin-bottom: 1rem;
+  }
+
+  .login-page__form-group label {
+    font-size: 0.85rem;
+  }
+
+  .login-page__form-group input {
+    padding: 0.65rem;
+    font-size: 0.9rem;
+  }
+
+  .login-page__submit-btn {
+    padding: 0.75rem;
+    font-size: 0.9rem;
+  }
+
+  .login-page__footer {
+    font-size: 0.85rem;
+  }
 }

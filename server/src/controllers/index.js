@@ -5,3 +5,4 @@ export { orderController } from './orderController.js';
 export { statusController } from './statusController.js';
 export { dashboardController } from './dashboardController.js';
 export { operatorController } from './operatorController.js';
+export { contentController } from './contentController.js';

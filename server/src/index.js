@@ -2,7 +2,9 @@ import express from 'express';
 import cors from 'cors';
 import { config } from './config/index.js';
 import { errorHandler, notFound } from './middleware/index.js';
-import { authRoutes, userRoutes, customerRoutes, orderRoutes, statusRoutes, dashboardRoutes, operatorRoutes } from './routes/index.js';
+import { authRoutes, userRoutes, customerRoutes, orderRoutes, statusRoutes, dashboardRoutes, operatorRoutes, contentRoutes } from './routes/index.js';
+import initRoutes from './routes/initRoutes.js';
+import debugRoutes from './routes/debugRoutes.js';
 
 const app = express();
 
@@ -31,6 +33,9 @@ app.use('/api/orders', orderRoutes);
 app.use('/api/status', statusRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/operators', operatorRoutes);
+app.use('/api/content', contentRoutes);
+app.use('/api/init', initRoutes);
+app.use('/api/debug', debugRoutes);
 
 // Error handling
 app.use(notFound);

@@ -412,3 +412,125 @@
     width: 100%;
   }
 }
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .dashboard-page {
+    padding: 1.5rem;
+  }
+
+  .dashboard-page__header h1 {
+    font-size: 1.75rem;
+  }
+
+  .dashboard-page__stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .dashboard-page__charts-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-page__chart-card {
+    padding: 1.5rem;
+  }
+
+  .dashboard-page__chart-card h2 {
+    font-size: 1.25rem;
+  }
+}
+
+/* Small mobile */
+@media (max-width: 480px) {
+  .dashboard-page {
+    padding: 0.75rem;
+  }
+
+  .dashboard-page__header h1 {
+    font-size: 1.4rem;
+  }
+
+  .dashboard-page__filters {
+    gap: 0.4rem;
+  }
+
+  .dashboard-page__date-input,
+  .dashboard-page__filter-btn {
+    font-size: 0.85rem;
+    padding: 0.4rem 0.75rem;
+  }
+
+  .dashboard-page__stat-card {
+    padding: 1.25rem;
+  }
+
+  .dashboard-page__stat-card__title {
+    font-size: 0.9rem;
+  }
+
+  .dashboard-page__stat-card__value {
+    font-size: 1.5rem;
+  }
+
+  .dashboard-page__stat-card__icon {
+    font-size: 2rem;
+  }
+
+  .dashboard-page__chart-card {
+    padding: 1.25rem;
+  }
+
+  .dashboard-page__chart-card h2 {
+    font-size: 1.1rem;
+  }
+
+  .dashboard-page__status-bar__label {
+    font-size: 0.85rem;
+  }
+
+  .dashboard-page__status-bar__count {
+    font-size: 0.85rem;
+  }
+
+  .dashboard-page__delivery-stat__label {
+    font-size: 0.85rem;
+  }
+
+  .dashboard-page__delivery-stat__value {
+    font-size: 1.1rem;
+  }
+
+  .dashboard-page__trend-bar__date {
+    font-size: 0.75rem;
+  }
+
+  .dashboard-page__trend-bar__count {
+    font-size: 0.85rem;
+  }
+
+  .dashboard-page__courier-item__name {
+    font-size: 0.9rem;
+  }
+
+  .dashboard-page__courier-item__stats {
+    font-size: 0.8rem;
+  }
+
+  .dashboard-page__recent-order__tracking {
+    font-size: 0.8rem;
+  }
+
+  .dashboard-page__recent-order__customer {
+    font-size: 0.85rem;
+  }
+
+  .dashboard-page__recent-order__route {
+    font-size: 0.8rem;
+  }
+
+  .dashboard-page__recent-order__status-badge {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+  }
+}

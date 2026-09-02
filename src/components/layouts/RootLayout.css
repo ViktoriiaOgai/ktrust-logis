@@ -6,6 +6,7 @@
 .root-layout__content {
   flex: 1;
   padding: 2rem;
+  padding-top: calc(80px + 2rem);
   background-color: #f5f5f5;
   overflow-y: auto;
 }
@@ -13,5 +14,14 @@
 @media (max-width: 768px) {
   .root-layout__content {
     padding: 1rem;
+    padding-top: calc(60px + 1rem);
+  }
+}
+
+/* Small mobile */
+@media (max-width: 480px) {
+  .root-layout__content {
+    padding: 0.75rem;
+    padding-top: calc(60px + 0.75rem);
   }
 }

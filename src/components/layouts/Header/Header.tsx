@@ -17,18 +17,29 @@ export default function Header() {
   const handleLogout = () => {
     logout();
   };
- 
+
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  const closeMobileMenu = () => {
+    setIsMobileMenuOpen(false);
+  };
+
   return (
     <>
       <header className="header">
         <div className="header-container">
           <div className="header-left">
-            <Link to="/" className="Btn-logo" >
-      <Logo />
-    </Link>
+            <Link to="/" className="Btn-logo" onClick={closeMobileMenu}>
+              <Logo />
+            </Link>
           </div>
 
-          <div className="header-right">
+          {/* Desktop Navigation */}
+          <div className="header-right desktop-nav">
             <OrderButton
               className="menu-btn"
               onClick={() => setMenuType("services")}
@@ -93,8 +104,95 @@ export default function Header() {
               </OrderButton>
             )}
           </div>
+
+          {/* Mobile Menu Button */}
+          <button
+            className="mobile-menu-btn"
+            onClick={toggleMobileMenu}
+            aria-label="Меню"
+          >
+            <span className="hamburger-line"></span>
+            <span className="hamburger-line"></span>
+            <span className="hamburger-line"></span>
+          </button>
         </div>
       </header>
+
+      {/* Mobile Menu */}
+      <div className={`mobile-menu ${isMobileMenuOpen ? 'mobile-menu--open' : ''}`}>
+        <div className="mobile-menu__overlay" onClick={closeMobileMenu}></div>
+        <div className="mobile-menu__content">
+          <button className="mobile-menu__close" onClick={closeMobileMenu}>×</button>
+
+          <nav className="mobile-menu__nav">
+            <Link to="/" className="mobile-menu__link" onClick={closeMobileMenu}>Главная</Link>
+            <button
+              className="mobile-menu__link"
+              onClick={() => {
+                setMenuType("services");
+                closeMobileMenu();
+              }}
+            >
+              Услуги
+            </button>
+            <button
+              className="mobile-menu__link"
+              onClick={() => {
+                setMenuType("about");
+                closeMobileMenu();
+              }}
+            >
+              О компании
+            </button>
+            <button
+              className="mobile-menu__link"
+              onClick={() => {
+                setMenuType("contacts");
+                closeMobileMenu();
+              }}
+            >
+              Контакты
+            </button>
+
+            {isAuthenticated ? (
+              <>
+                {user?.role === 'User' && (
+                  <Link to="/" className="mobile-menu__link" onClick={closeMobileMenu}>
+                    Личный кабинет
+                  </Link>
+                )}
+                {user?.role === 'Operator' && (
+                  <Link to="/operator" className="mobile-menu__link" onClick={closeMobileMenu}>
+                    Панель оператора
+                  </Link>
+                )}
+                {user?.role === 'Admin' && (
+                  <Link to="/admin" className="mobile-menu__link" onClick={closeMobileMenu}>
+                    Админ панель
+                  </Link>
+                )}
+                {user?.role === 'Courier' && (
+                  <Link to="/courier" className="mobile-menu__link" onClick={closeMobileMenu}>
+                    Панель курьера
+                  </Link>
+                )}
+                <button onClick={handleLogout} className="mobile-menu__link mobile-menu__link--logout">
+                  Выйти
+                </button>
+              </>
+            ) : (
+              <OrderButton
+                to="/login"
+                className="mobile-menu__btn"
+                onClick={closeMobileMenu}
+              >
+                Авторизация
+                <Go/>
+              </OrderButton>
+            )}
+          </nav>
+        </div>
+      </div>
 
       {menuType && (
         <MenuPopover
