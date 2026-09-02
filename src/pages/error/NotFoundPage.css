@@ -75,6 +75,10 @@
     padding: 2rem;
   }
 
+  .not-found-page__icon {
+    font-size: 3rem;
+  }
+
   .not-found-page__title {
     font-size: 1.5rem;
   }
@@ -89,5 +93,29 @@
 
   .not-found-page__btn {
     width: 100%;
+  }
+}
+
+/* Small mobile */
+@media (max-width: 360px) {
+  .not-found-page__container {
+    padding: 1.5rem;
+  }
+
+  .not-found-page__icon {
+    font-size: 2.5rem;
+  }
+
+  .not-found-page__title {
+    font-size: 1.3rem;
+  }
+
+  .not-found-page__message {
+    font-size: 0.9rem;
+  }
+
+  .not-found-page__btn {
+    padding: 0.65rem 1.25rem;
+    font-size: 0.9rem;
   }
 }

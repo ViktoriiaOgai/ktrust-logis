@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import Header from "@/components/layouts/Header/Header";
 import "@/pages/client/HomePage.css";
 import "@/pages/client/Services/AirDeliveryPage.css";
@@ -6,88 +7,137 @@ import a_container_from_ins from "@/assets/img/a_container_from_ins.jpg"
 import Calculator from "@/components/sections/Calculator";
 import Footer from "@/components/layouts/Footer/Footer";
 import ServiceHero from "@/components/sections/Services/ServiceHero";
-import {containerDelivery } from "@/data/delivery/containerDelivery";
-import { containerInstructions } from "@/data/delivery/instructions";
+import { contentService } from "@/services/contentService";
+import type { Service, Tariff } from "@/services/contentService";
 import Table from "@/components/ui/Table";
 import ContainerInstructions from "@/components/sections/ContainerInstructions/ContainerInstructions";
-
+import { containerInstructions } from "@/data/delivery/instructions";
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
+import EmptyState from "@/components/ui/EmptyState";
 
 export default function ContainerDeliveryPage() {
+  const [service, setService] = useState<Service | null>(null);
+  const [tariffs, setTariffs] = useState<Tariff[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-   return (
+  useEffect(() => {
+    loadServiceData();
+  }, []);
+
+  const loadServiceData = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const [serviceData, tariffsData] = await Promise.all([
+        contentService.getServiceBySlug('container-delivery'),
+        contentService.getTariffs('container-delivery')
+      ]);
+
+      setService(serviceData);
+      setTariffs(tariffsData);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Ошибка загрузки данных');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <>
+        <Header />
+        <div className="service-page">
+          <LoadingSpinner message="Загрузка данных..." />
+        </div>
+        <Footer />
+      </>
+    );
+  }
+
+  if (error || !service) {
+    return (
+      <>
+        <Header />
+        <div className="service-page">
+          <EmptyState
+            icon="⚠️"
+            title="Ошибка загрузки"
+            message={error || 'Услуга не найдена'}
+            action={{
+              label: 'Повторить',
+              onClick: loadServiceData
+            }}
+          />
+        </div>
+        <Footer />
+      </>
+    );
+  }
+
+  const heroInfo = service.hero_info || [];
+
+  return (
     <>
       <Header />
       <div className="service-page">
         <section className="service-page-hero">
           <div className="hero-left">
-      <ServiceHero
-    title="Контейнерная доставка из Южной Кореи"
-    description=""
-    buttonText="Тарифы"
-    scrollToPrice={true}
-    info={[
-    {
-      title: "Скорость доставки",
-      description: "От 14 до 40 дней в зависимости от страны",
-    },
-    {
-      title: "Стоимость",
-      description: "Дешевле, чем авиа",
-    },
-    {
-      title: "Товар",
-      description: "Подходитбольших партий",
-    },
-  ]}
-/>
+            <ServiceHero
+              title={service.hero_title || service.title}
+              description={service.hero_description || service.description || ''}
+              buttonText={service.hero_button_text || 'Тарифы'}
+              scrollToPrice={true}
+              info={heroInfo.map(info => ({
+                title: info.title,
+                description: info.description
+              }))}
+            />
+          </div>
+          <div className="service-hero__right">
+            <img src={a_container_from_ins} alt="Контейнерная доставка" />
+          </div>
+        </section>
 
+        <section id="price" className="price-section">
+          <h1>Тарифы контейнер</h1>
+          <div className="tab">
+            {tariffs.map((tariff) => (
+              <a
+                key={tariff.id}
+                href={`#${tariff.country_code}`}
+                className="InfBtn"
+              >
+                {tariff.country_name}
+              </a>
+            ))}
+          </div>
+          {tariffs.map((tariff) => (
+            <Table
+              key={tariff.id}
+              id={tariff.country_code}
+              title={tariff.country_name}
+              columns={tariff.columns}
+              rows={tariff.rows || []}
+              notes={tariff.notes}
+            />
+          ))}
+        </section>
+
+        <ContainerInstructions
+          data={containerInstructions}
+          notesTitle="Условия упаковки и ответственности"
+        />
+
+        <Calculator
+          title="Получите консультацию"
+          description="Оставьте заявку, наш менеджер свяжется с вами и уточнит детали"
+          buttonText="Оставить заявку"
+          className="order-btn"
+        />
       </div>
-      <div className="service-hero__right">
-    
-          <img src={a_container_from_ins}/>
-
-      </div>
-      </section>
-
-    <section id="price" className="price-section">
-        <h1>Тарифы контейнер</h1> 
-  <div className="tab">
-  {containerDelivery.container.tariffs.map((country) => (
-    <a
-      key={country.id}
-      href={`#${country.id}`}
-      className="InfBtn"
-    >
-      {country.country}
-    </a>
-  ))}
-</div>
-  {containerDelivery.container.tariffs.map((country) => (
-  <Table
-    key={country.id}
-    id={country.id}
-    title={country.country}
-    rows={country.rows}
-     notes={country.notes}
-  />
-))}
-    
-    
-</section>
-<ContainerInstructions
-  data={containerInstructions}
-  notesTitle="Условия упаковки и ответственности"
-/>
-
-      <Calculator
-  title="Получите консультацию"
-  description="Оставьте заявку, наш менеджер свяжется с вами и уточнит детали"
-  buttonText="Оставить заявку"
-  className="order-btn"
- 
-/>
-     </div>
-    <Footer />
+      <Footer />
     </>
   );
 }

@@ -87,13 +87,89 @@
 }
 
 @media (max-width: 768px) {
+  .operator-dashboard {
+    padding: 1rem;
+  }
+
   .operator-dashboard__content {
     grid-template-columns: 1fr;
+    gap: 1.5rem;
   }
 
   .operator-dashboard__header {
     flex-direction: column;
     align-items: flex-start;
     gap: 1rem;
+    padding: 1rem;
+  }
+
+  .operator-dashboard__header h1 {
+    font-size: 1.5rem;
+  }
+
+  .operator-dashboard__menu {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .operator-dashboard__menu-item {
+    flex: 1;
+    min-width: 120px;
+    font-size: 0.9rem;
+    padding: 0.75rem;
+  }
+
+  .operator-dashboard__info {
+    padding: 1.5rem;
+  }
+
+  .operator-dashboard__info h2 {
+    font-size: 1.3rem;
+  }
+
+  .operator-dashboard__info p {
+    font-size: 0.9rem;
+  }
+}
+
+/* Small mobile */
+@media (max-width: 480px) {
+  .operator-dashboard {
+    padding: 0.75rem;
+  }
+
+  .operator-dashboard__header {
+    padding: 0.75rem;
+  }
+
+  .operator-dashboard__header h1 {
+    font-size: 1.3rem;
+  }
+
+  .operator-dashboard__menu {
+    gap: 0.5rem;
+  }
+
+  .operator-dashboard__menu-item {
+    font-size: 0.85rem;
+    padding: 0.65rem;
+    min-width: 100px;
+  }
+
+  .operator-dashboard__info {
+    padding: 1.25rem;
+  }
+
+  .operator-dashboard__info h2 {
+    font-size: 1.2rem;
+  }
+
+  .operator-dashboard__info p {
+    font-size: 0.85rem;
+  }
+
+  .operator-dashboard__logout-btn {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
   }
 }

@@ -1,11 +1,19 @@
 import "@/components/ui/Table.css";
 import TableNotes from "@/components/ui/TableNotes/TableNotes";
 import Close from "@/assets/icons/close.svg?react";
-import type { TableRow } from "@/data/delivery/airDelivery";
+
+interface TableRow {
+  category: string;
+  price: string;
+  delivery: string;
+  note: string;
+  hasCloseIcon?: boolean;
+}
 
 type TableProps = {
   id: string;
   title: string;
+  columns?: string[];
   rows: TableRow[];
   notes: string[];
 };
@@ -13,9 +21,12 @@ type TableProps = {
 export default function Table({
   id,
   title,
+  columns,
   rows,
   notes,
 }: TableProps) {
+  const tableColumns = columns || ['Категория', 'Тариф, $ / кг', 'Срок доставки*', 'Другие регионы'];
+
   return (
     <section id={id} className="delivery-table">
       <h2>{title}</h2>
@@ -23,10 +34,9 @@ export default function Table({
       <table>
         <thead>
           <tr>
-            <th>Категория</th>
-            <th>Тариф, $ / кг</th>
-            <th>Срок доставки*</th>
-            <th>Другие регионы</th>
+            {tableColumns.map((column, index) => (
+              <th key={index}>{column}</th>
+            ))}
           </tr>
         </thead>
 

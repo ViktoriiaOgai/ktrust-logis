@@ -75,6 +75,10 @@
     padding: 2rem;
   }
 
+  .access-denied-page__icon {
+    font-size: 3rem;
+  }
+
   .access-denied-page__title {
     font-size: 1.5rem;
   }
@@ -89,5 +93,29 @@
 
   .access-denied-page__btn {
     width: 100%;
+  }
+}
+
+/* Small mobile */
+@media (max-width: 360px) {
+  .access-denied-page__container {
+    padding: 1.5rem;
+  }
+
+  .access-denied-page__icon {
+    font-size: 2.5rem;
+  }
+
+  .access-denied-page__title {
+    font-size: 1.3rem;
+  }
+
+  .access-denied-page__message {
+    font-size: 0.9rem;
+  }
+
+  .access-denied-page__btn {
+    padding: 0.65rem 1.25rem;
+    font-size: 0.9rem;
   }
 }

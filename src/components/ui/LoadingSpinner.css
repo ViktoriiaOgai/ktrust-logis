@@ -46,3 +46,37 @@
   color: #666;
   margin: 0;
 }
+
+/* Mobile */
+@media (max-width: 768px) {
+  .loading-spinner {
+    padding: 1.5rem;
+  }
+
+  .loading-spinner__circle {
+    width: 32px;
+    height: 32px;
+    border-width: 3px;
+  }
+
+  .loading-spinner__message {
+    font-size: 0.85rem;
+  }
+}
+
+/* Small mobile */
+@media (max-width: 480px) {
+  .loading-spinner {
+    padding: 1rem;
+  }
+
+  .loading-spinner__circle {
+    width: 28px;
+    height: 28px;
+    border-width: 2.5px;
+  }
+
+  .loading-spinner__message {
+    font-size: 0.8rem;
+  }
+}
