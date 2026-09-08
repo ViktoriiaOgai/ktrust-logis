@@ -11,33 +11,41 @@ const app = express();
 // Middleware
 const corsOptions = {
   origin: function (origin, callback) {
-    // В development разрешаем localhost
+    // Запросы без Origin (например, серверные запросы)
+    if (!origin) {
+      callback(null, true);
+      return;
+    }
+
+    // В development разрешаем все origin
     if (config.nodeEnv === 'development') {
       callback(null, true);
       return;
     }
 
-    // В production разрешаем все или конкретные домены
-    if (!origin) {
-      // Разрешаем запросы без origin (например, мобильные приложения)
-      callback(null, true);
-      return;
-    }
+    // Получаем список разрешённых origin из ENV
+    const allowedOrigins =
+      process.env.ALLOWED_ORIGINS
+        ?.split(',')
+        .map((item) => item.trim())
+        .filter(Boolean) || [];
 
-    // В production можно добавить белый список доменов
-    const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(',') || [];
+    // Если список не задан — временно разрешаем все
     if (allowedOrigins.length === 0) {
-      // Если список пуст, разрешаем все (не рекомендуется для безопасности)
       callback(null, true);
       return;
     }
 
+    // Проверяем текущий origin
     if (allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
-      callback(new Error('Not allowed by CORS'));
+      console.error(`CORS blocked origin: ${origin}`);
+      console.error(`Allowed origins: ${allowedOrigins.join(', ')}`);
+      callback(new Error(`Not allowed by CORS: ${origin}`));
     }
   },
+
   credentials: true,
 };
 
