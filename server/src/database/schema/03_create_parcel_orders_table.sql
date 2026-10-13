@@ -60,5 +60,7 @@ CREATE INDEX IF NOT EXISTS idx_parcel_orders_destination_city ON parcel_orders(d
 CREATE INDEX IF NOT EXISTS idx_parcel_orders_created_at ON parcel_orders(created_at DESC);
 
 -- Trigger to update updated_at timestamp
+DROP TRIGGER IF EXISTS update_parcel_orders_updated_at ON parcel_orders;
+
 CREATE TRIGGER update_parcel_orders_updated_at BEFORE UPDATE ON parcel_orders
   FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();

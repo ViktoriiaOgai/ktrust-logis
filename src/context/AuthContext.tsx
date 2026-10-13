@@ -6,7 +6,7 @@ import type { User } from '@/services/userService';
 interface AuthContextType {
   user: User | null;
   token: string | null;
-  login: (email: string, password: string) => Promise<void>;
+  login: (email: string, password: string) => Promise<User>;
   loginWithToken: (user: User, token: string) => void;
   logout: () => void;
   isAuthenticated: boolean;
@@ -41,35 +41,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const login = async (email: string, password: string) => {
-    try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email,
-          password,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || 'Login failed');
-      }
-
-      const userData = data.data.user;
-      const userToken = data.data.token;
-
-      setUser(userData);
-      setToken(userToken);
-      localStorage.setItem('token', userToken);
-      localStorage.setItem('user', JSON.stringify(userData));
-      apiClient.setToken(userToken);
-    } catch (error) {
-      throw error;
-    }
+    const { user: userData, token: userToken } = await apiClient.post<{ user: User; token: string }>(
+      '/api/auth/login',
+      { email, password }
+    );
+    loginWithToken(userData, userToken);
+    return userData;
   };
 
   const loginWithToken = (userData: User, userToken: string) => {
