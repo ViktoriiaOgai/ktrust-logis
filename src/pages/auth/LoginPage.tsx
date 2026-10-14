@@ -8,7 +8,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { loginWithToken } = useAuth();
+  const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -17,31 +17,10 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email,
-          password,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || 'Login failed');
-      }
-
-      localStorage.setItem('token', data.data.token);
-      localStorage.setItem('user', JSON.stringify(data.data.user));
-      
-      // Обновляем состояние в AuthContext
-      loginWithToken(data.data.user, data.data.token);
+      const user = await login(email, password);
 
       // Перенаправление в зависимости от роли
-      const userRole = data.data.user?.role;
+      const userRole = user.role;
       let redirectUrl = '/';
       
       switch (userRole) {
@@ -62,7 +41,7 @@ export default function LoginPage() {
       }
 
       navigate(redirectUrl);
-    } catch (err: any) {
+    } catch (err: unknown) {
       const message = err instanceof Error ? err.message : 'Login failed';
       setError(message);
     } finally {

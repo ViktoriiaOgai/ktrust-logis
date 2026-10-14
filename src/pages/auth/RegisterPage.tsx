@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
+import { apiClient } from "@/services/api";
+import type { User } from "@/services/userService";
 import "./LoginPage.css";
 
 export default function RegisterPage() {
@@ -11,7 +13,7 @@ export default function RegisterPage() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const { login } = useAuth();
+  const { loginWithToken } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -20,34 +22,15 @@ export default function RegisterPage() {
     setLoading(true);
 
     try {
-      const response = await fetch(
-        "http://localhost:3001/api/auth/register",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            fullName,
-            email,
-            password,
-          }),
-        },
+      const { user, token } = await apiClient.post<{ user: User; token: string }>(
+        "/api/auth/register",
+        { fullName, email, password },
       );
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(
-          data.message || "Registration failed",
-        );
-      }
-
-      // После регистрации автоматически авторизуем пользователя
-      await login(email, password);
+      loginWithToken(user, token);
 
       // Редирект в зависимости от роли
-      const userRole = data.data.user?.role;
+      const userRole = user.role;
       let redirectUrl = '/';
       
       switch (userRole) {
